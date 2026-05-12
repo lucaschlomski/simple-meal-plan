@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { LanguageToggle } from "./components/LanguageToggle";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { Turnstile, type TurnstileStatus } from "./components/Turnstile";
@@ -78,6 +78,41 @@ export function RootPage({ theme, onToggleTheme, language, onToggleLanguage }: {
 }) {
   const [creating, setCreating] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  // Load Ko-fi overlay widget once on mount. The button is rendered inside a
+  // same-origin iframe via document.write, so parent CSS cannot reach button
+  // colours — a single accent colour works across both themes. Re-initialising
+  // on theme change causes stale setInterval timers inside Ko-fi's
+  // createButtonContainerIframe to keep firing on removed elements, breaking
+  // React's update cycle. Load once; clean up on unmount only.
+  useEffect(() => {
+    const removeKofi = () => {
+      document.querySelectorAll('[id^="kofi-widget-overlay"],[class*="floatingchat"],[id^="kofi-wo"]')
+        .forEach(el => el.remove());
+      const existing = document.querySelector('script[src*="overlay-widget"]');
+      if (existing) existing.remove();
+      // Clear the cached IIFE so draw() re-initialises cleanly if remounted.
+      delete (window as unknown as Record<string, unknown>).kofiWidgetOverlay;
+    };
+    removeKofi();
+
+    const script = document.createElement('script');
+    script.src = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js';
+    script.async = true;
+    script.onload = () => {
+      (window as unknown as Record<string, { draw: (id: string, opts: Record<string, string>) => void }>)
+        .kofiWidgetOverlay?.draw('lucaschlomski', {
+          'type': 'floating-chat',
+          'floating-chat.donateButton.text': 'Support me',
+          // Accent colour: readable on both light and dark backgrounds.
+          'floating-chat.donateButton.background-color': '#8b6fd6',
+          'floating-chat.donateButton.text-color': '#ffffff',
+        });
+    };
+    document.body.appendChild(script);
+
+    return () => { removeKofi(); };
+  }, []); // empty deps: load once, never re-init on theme/language change
   const [turnstileStatus, setTurnstileStatus] = useState<TurnstileStatus>("loading");
   const [turnstileToken, setTurnstileToken] = useState("");
 

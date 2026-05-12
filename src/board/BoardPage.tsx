@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { Settings } from "lucide-react";
+import { Settings, X } from "lucide-react";
 import type {
   Board,
   Day,
@@ -54,6 +54,7 @@ export function BoardPage({
   const [editing, setEditing] = useState<Meal | null>(null);
   const [createDate, setCreateDate] = useState<string | null>(null);
   const [adminOpen, setAdminOpen] = useState(false);
+  const [kofiOpen, setKofiOpen] = useState(false);
   const toast = useToast();
 
   const railRef = useRef<HTMLDivElement>(null);
@@ -299,7 +300,17 @@ export function BoardPage({
             ))}
           </nav>
         ) : null}
-        <p className="board-attribution">{t(language, "board.by")}</p>
+        <p className="board-attribution">
+          {t(language, "board.by")}
+          {" · "}
+          <button
+            type="button"
+            className="board-kofi-link"
+            onClick={() => setKofiOpen(true)}
+          >
+            {t(language, "board.supportLink")}
+          </button>
+        </p>
       </footer>
 
       {(editing || createDate) && (
@@ -319,6 +330,31 @@ export function BoardPage({
           onSave={saveMeal}
         />
       )}
+      {kofiOpen ? (
+        <div
+          className="modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-label={t(language, "board.supportLink")}
+          onClick={() => setKofiOpen(false)}
+        >
+          <div className="kofi-modal" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className="kofi-modal-close btn icon ghost-quiet"
+              aria-label="Close"
+              onClick={() => setKofiOpen(false)}
+            >
+              <X size={16} />
+            </button>
+            <iframe
+              src="https://ko-fi.com/lucaschlomski?hidefeed=true&widget=true&embed=true"
+              title="Support on Ko-fi"
+              className="kofi-modal-iframe"
+            />
+          </div>
+        </div>
+      ) : null}
       {adminOpen ? (
         <BoardAdminModal
           slug={slug}
