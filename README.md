@@ -18,6 +18,13 @@ Create a `.dev.vars` file (gitignored):
 ```
 ADMIN_PASSWORD=admin
 SESSION_SIGNING_KEY=dev-session-key
+TURNSTILE_SECRET_KEY=dev-secret
+```
+
+Create a `.env.local` file for Vite-exposed build-time values:
+
+```
+VITE_TURNSTILE_SITE_KEY=dev-site-key
 ```
 
 Local server at `http://localhost:8788`. Demo board: `/b/echo-harbor-amber` (password: `demo123`).
@@ -108,11 +115,20 @@ Hooks in `src/hooks/`:
 
 - All modals trap focus via `useFocusTrap`.
 - Modals close via backdrop click or the footer Cancel/Done button. No X button in the header.
+- Exception: the board admin modal uses a top-right X and no footer because its content is long and not a submit-once flow.
 - Esc closes the modal. Cmd/Ctrl+Enter submits. Plain Enter inside any single-line field submits.
 - Nested popovers (attendee dropdown, confirm popover, date picker calendar) intercept Esc with `stopPropagation()`. Closing a nested popover must not close the surrounding modal. Press Esc twice to exit the modal from a nested popover.
 - Meal modal renders all fields by default. No progressive disclosure.
 - Meal modal field order (top to bottom): meal name, type, cook, date, attendees, notes.
 - Destructive actions inside modals use `ConfirmInline`, never native `confirm`.
+
+### Board Creation and Admin
+
+- Root `/` starts invisible Turnstile verification on page load. Public board creation opens in a modal and stays disabled until verification returns a token.
+- Public board creation requires Turnstile verification. Root `/admin` board creation is protected by global admin auth and does not use Turnstile.
+- `/admin` is overview-only after login: create, open, metadata, delete. It does not edit board properties or people.
+- The board gear button opens a board admin modal from an unlocked board. It edits board name, board password, optional board-admin password, people, and can delete the board.
+- Board admin access uses the board cookie until a board-admin password is set; after that it requires both the board cookie and the board-admin cookie.
 
 ### Meal Card Behaviour
 

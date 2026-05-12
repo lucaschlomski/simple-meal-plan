@@ -32,6 +32,10 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env, params })
   const board = await getBoardBySlug(env.DB, slug);
   if (!board) return Response.json({ ok: false, error: "BOARD_NOT_FOUND" }, { status: 404 });
 
+  await env.DB.prepare("UPDATE boards SET last_accessed_at = CURRENT_TIMESTAMP WHERE id = ?")
+    .bind(board.id)
+    .run();
+
   const bounds = await env.DB.prepare(
     "SELECT MIN(meal_date) as min_date, MAX(meal_date) as max_date FROM meals WHERE board_id = ?"
   )

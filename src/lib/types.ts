@@ -33,6 +33,8 @@ export type AdminBoard = {
   name: string;
   created_at: string;
   updated_at: string;
+  last_accessed_at: string | null;
+  board_admin_enabled: boolean | number;
 };
 
 export const MEAL_TYPES: MealType[] = [

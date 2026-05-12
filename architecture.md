@@ -80,8 +80,8 @@ Within same type and date: stable `id ASC` ordering. No restriction on one meal 
 - Protected by one global admin password from environment secret.
 - Login flow sets a cookie session.
 - Admin session cookie name: `mp_admin`.
-- Admin dashboard can manage all boards and all board properties.
-- Admin dashboard manages board people lists.
+- Admin dashboard creates boards, lists metadata, opens boards, and deletes boards.
+- Board properties and people are edited from the board admin modal opened on an unlocked board.
 
 ### Board Area (`/b/:slug`)
 
@@ -89,7 +89,23 @@ Within same type and date: stable `id ASC` ordering. No restriction on one meal 
 - Unlock flow sets a board cookie session.
 - Board cookie name pattern: `mp_board_<slug>`.
 - Board cookie grants board read/write meal access.
-- Board access does not grant admin capabilities.
+- Board cookie grants board-admin modal access until a separate board-admin password is set.
+
+### Board Admin Modal
+
+- Edits board name, board password, optional board-admin password, people/groups, order, and board deletion.
+- Opened from the gear button in the board header. There is no standalone board-admin route.
+- If `boards.board_admin_password_hash` is null, the normal board session unlocks the modal.
+- If `boards.board_admin_password_hash` is set, both the normal board cookie and a `boardAdmin` session cookie are required.
+- Board admin cookie name pattern: `mp_board_admin_<slug>`.
+
+### Public Board Creation (`/`)
+
+- Root page runs Cloudflare Turnstile in invisible mode on page load.
+- The create-board modal uses the resulting token and disables submit while verification is pending.
+- Frontend needs `VITE_TURNSTILE_SITE_KEY` at build time.
+- Backend verifies tokens with `TURNSTILE_SECRET_KEY` before creating a public board.
+- Root `/admin` board creation does not use Turnstile because it already requires global admin auth.
 
 ### Password and session implementation
 
@@ -113,8 +129,10 @@ Within same type and date: stable `id ASC` ordering. No restriction on one meal 
 | `slug` | TEXT | Unique, human-typable |
 | `name` | TEXT | Display name |
 | `board_password_hash` | TEXT | SHA-256 hash |
+| `board_admin_password_hash` | TEXT | Nullable SHA-256 hash for optional board-admin password |
 | `created_at` | TEXT | Default `CURRENT_TIMESTAMP` |
 | `updated_at` | TEXT | Auto-updated via trigger |
+| `last_accessed_at` | TEXT | Updated when a board is loaded with a valid board session |
 
 **`people`**
 | Column | Type | Notes |
@@ -178,9 +196,23 @@ All endpoints follow these conventions:
 
 ### Board access
 
+- `POST /api/boards` — public board creation; requires Turnstile token
 - `POST /api/boards/:slug/unlock` — verify board password, set board cookie
 - `GET /api/boards/:slug/board` — return board columns, meals, attendees, attendee counts. Requires valid board cookie.
 - `GET /api/boards/:slug/people` — return board people list, ordered by `position ASC, id ASC`. Requires valid board cookie.
+
+### Board admin
+
+- `POST /api/boards/:slug/admin/unlock` — verify board-admin password if set, otherwise board password; sets board-admin cookie
+- `GET /api/boards/:slug/admin/session`
+- `GET /api/boards/:slug/admin`
+- `PUT /api/boards/:slug/admin` — update board name, board password, or admin password
+- `DELETE /api/boards/:slug/admin` — delete current board
+- `GET /api/boards/:slug/admin/people`
+- `POST /api/boards/:slug/admin/people` — requires `display_name`, optional `group_size` (default 1)
+- `PUT /api/boards/:slug/admin/people/:id`
+- `DELETE /api/boards/:slug/admin/people/:id`
+- `POST /api/boards/:slug/admin/people/:id/move` with `{ direction: "up" | "down" }`
 
 ### Meals
 
@@ -199,12 +231,6 @@ All endpoints follow these conventions:
 - `POST /api/admin/logout`
 - `GET /api/admin/boards`
 - `POST /api/admin/boards`
-- `PUT /api/admin/boards/:id`
-- `GET /api/admin/boards/:id/people`
-- `POST /api/admin/boards/:id/people` — requires `display_name`, optional `group_size` (default 1)
-- `PUT /api/admin/people/:id`
-- `DELETE /api/admin/people/:id`
-- `POST /api/admin/people/:id/move` with `{ direction: "up" | "down" }` — server transactionally swaps `position` with the adjacent neighbor on the same board. No-op if already at the edge.
 - `DELETE /api/admin/boards/:id`
 
 ### Security and Validation
@@ -213,6 +239,7 @@ All endpoints follow these conventions:
 - Signature comparison uses constant-time comparison.
 - Auth cookies are `HttpOnly`, `SameSite=Lax`. `Secure` flag is conditional: set on HTTPS, omitted on local HTTP dev.
 - Board attendee add endpoint rejects inactive people.
+- Public board creation rejects requests without successful Turnstile siteverify.
 - `ADMIN_PASSWORD` and `SESSION_SIGNING_KEY` are validated at runtime on login/unlock — missing secrets return a clear error instead of a cryptic crash.
 
 ## D1 Migrations and Seeds
@@ -224,7 +251,9 @@ All endpoints follow these conventions:
 - Uses `RETURNING` on INSERT/UPDATE to return created/updated rows.
 - Initial migration: `db/migrations/0001_init.sql`
 - People position migration: `db/migrations/0002_people_position.sql`
-- Both `boards` and `meals` have `AFTER UPDATE` triggers with `WHEN NEW.updated_at = OLD.updated_at` to auto-update timestamps without recursion. Any new table with an `updated_at` column must follow this pattern.
+- Board admin/activity migration: `db/migrations/0003_board_admin_activity.sql`
+- `boards.updated_at` tracks board config/content changes; `boards.last_accessed_at` tracks successful board access and does not touch `updated_at`.
+- `people`, `meals`, and `meal_attendees` changes touch parent `boards.updated_at` via triggers.
 - Seed file: `db/seed.sql` — dev-only; do not run against production D1.
 - Local commands: `npm run db:migrate:local`, `npm run db:seed:local`
 

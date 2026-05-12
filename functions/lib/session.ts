@@ -3,7 +3,7 @@ import { constantTimeEqual } from "./crypto";
 const encoder = new TextEncoder();
 
 type SessionPayload = {
-  kind: "admin" | "board";
+  kind: "admin" | "board" | "boardAdmin";
   boardId?: number;
   slug?: string;
   exp: number;
@@ -49,6 +49,10 @@ export function getAdminCookieName(): string {
 
 export function getBoardCookieName(slug: string): string {
   return `mp_board_${cookieSafeSlug(slug)}`;
+}
+
+export function getBoardAdminCookieName(slug: string): string {
+  return `mp_board_admin_${cookieSafeSlug(slug)}`;
 }
 
 export async function createSessionToken(secret: string, payload: SessionPayload): Promise<string> {

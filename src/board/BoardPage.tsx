@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { Settings } from "lucide-react";
 import type {
   Board,
   Day,
@@ -18,6 +19,7 @@ import { useToast } from "../components/Toast";
 import { t } from "../lib/i18n";
 import { DayColumn } from "./DayColumn";
 import { MealModal } from "./MealModal";
+import { BoardAdminModal } from "../admin/BoardAdminModal";
 
 function defaultMealTypeForDate(date: string | null, days: Day[]): MealType {
   const day = date ? days.find((candidate) => candidate.date === date) : null;
@@ -51,6 +53,7 @@ export function BoardPage({
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState<Meal | null>(null);
   const [createDate, setCreateDate] = useState<string | null>(null);
+  const [adminOpen, setAdminOpen] = useState(false);
   const toast = useToast();
 
   const railRef = useRef<HTMLDivElement>(null);
@@ -231,10 +234,28 @@ export function BoardPage({
           <div className="board-identity">
             <span className="topbar-title">{board?.name || slug}</span>
             <span className="slug-pill">/{slug}</span>
+            <button
+              type="button"
+              className="btn icon ghost-quiet board-admin-toggle desktop-only"
+              onClick={() => setAdminOpen(true)}
+              aria-label={t(language, "admin.manage")}
+              title={t(language, "admin.manage")}
+            >
+              <Settings size={16} />
+            </button>
           </div>
         }
         right={
           <>
+            <button
+              type="button"
+              className="btn icon ghost-quiet board-admin-toggle mobile-only"
+              onClick={() => setAdminOpen(true)}
+              aria-label={t(language, "admin.manage")}
+              title={t(language, "admin.manage")}
+            >
+              <Settings size={16} />
+            </button>
             <LanguageToggle language={language} onToggle={onToggleLanguage} />
             <ThemeToggle theme={theme} onToggle={onToggleTheme} language={language} />
           </>
@@ -298,6 +319,14 @@ export function BoardPage({
           onSave={saveMeal}
         />
       )}
+      {adminOpen ? (
+        <BoardAdminModal
+          slug={slug}
+          language={language}
+          onClose={() => setAdminOpen(false)}
+          onChanged={loadAll}
+        />
+      ) : null}
     </main>
   );
 }

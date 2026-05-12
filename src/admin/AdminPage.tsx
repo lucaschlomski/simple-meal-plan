@@ -1,13 +1,17 @@
 import { FormEvent, useEffect, useState } from "react";
-import { ExternalLink, LogOut, Settings } from "lucide-react";
-import type { AdminBoard, LanguageMode, Person, ThemeMode } from "../lib/types";
+import { ExternalLink, LogOut, Trash2 } from "lucide-react";
+import type { AdminBoard, LanguageMode, ThemeMode } from "../lib/types";
 import { api } from "../lib/api";
 import { Topbar } from "../components/Topbar";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { LanguageToggle } from "../components/LanguageToggle";
 import { useToast } from "../components/Toast";
 import { t } from "../lib/i18n";
-import { BoardManageModal } from "./BoardManageModal";
+import { ConfirmInline } from "../components/ConfirmInline";
+
+function displayDateTime(value: string | null): string {
+  return value || "-";
+}
 
 export function AdminPage({
   theme,
@@ -23,8 +27,6 @@ export function AdminPage({
   const [authed, setAuthed] = useState(false);
   const [loginPassword, setLoginPassword] = useState("");
   const [boards, setBoards] = useState<AdminBoard[]>([]);
-  const [managingBoardId, setManagingBoardId] = useState<number | null>(null);
-  const [people, setPeople] = useState<Person[]>([]);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [saving, setSaving] = useState(false);
@@ -36,13 +38,6 @@ export function AdminPage({
       "/api/admin/boards"
     );
     setBoards(data.boards);
-  }
-
-  async function loadPeople(boardId: number) {
-    const data = await api<{ ok: true; people: Person[] }>(
-      `/api/admin/boards/${boardId}/people`
-    );
-    setPeople(data.people);
   }
 
   async function checkSession() {
@@ -58,14 +53,6 @@ export function AdminPage({
   useEffect(() => {
     checkSession();
   }, []);
-
-  useEffect(() => {
-    if (managingBoardId) {
-      loadPeople(managingBoardId).catch(() => setPeople([]));
-    } else {
-      setPeople([]);
-    }
-  }, [managingBoardId]);
 
   async function login(e: FormEvent) {
     e.preventDefault();
@@ -89,8 +76,6 @@ export function AdminPage({
     await api("/api/admin/logout", { method: "POST" });
     setAuthed(false);
     setBoards([]);
-    setPeople([]);
-    setManagingBoardId(null);
   }
 
   async function createBoard(e: FormEvent) {
@@ -112,94 +97,11 @@ export function AdminPage({
     }
   }
 
-  async function updateBoard(
-    boardId: number,
-    patch: { name?: string; password?: string }
-  ) {
-    setSaving(true);
-    try {
-      await api(`/api/admin/boards/${boardId}`, {
-        method: "PUT",
-        body: JSON.stringify(patch)
-      });
-      toast.showSuccess(t(language, "admin.boardUpdated"));
-      await loadBoards();
-    } catch (err) {
-      toast.showError(err instanceof Error ? err.message : t(language, "admin.updateFailed"));
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  async function addPerson(boardId: number, displayName: string, groupSize: number) {
-    setSaving(true);
-    try {
-      await api(`/api/admin/boards/${boardId}/people`, {
-        method: "POST",
-        body: JSON.stringify({ display_name: displayName, group_size: groupSize })
-      });
-      toast.showSuccess(t(language, "admin.personAdded"));
-      await loadPeople(boardId);
-    } catch (err) {
-      toast.showError(err instanceof Error ? err.message : t(language, "admin.addPersonFailed"));
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  async function removePerson(boardId: number, personId: number) {
-    setSaving(true);
-    try {
-      await api(`/api/admin/people/${personId}`, { method: "DELETE" });
-      toast.showSuccess(t(language, "admin.personRemoved"));
-      await loadPeople(boardId);
-    } catch (err) {
-      toast.showError(err instanceof Error ? err.message : t(language, "admin.removeFailed"));
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  async function updatePerson(
-    boardId: number,
-    person: Person,
-    patch: Partial<{ display_name: string; group_size: number; active: boolean }>
-  ) {
-    setSaving(true);
-    try {
-      await api(`/api/admin/people/${person.id}`, {
-        method: "PUT",
-        body: JSON.stringify(patch)
-      });
-      await loadPeople(boardId);
-    } catch (err) {
-      toast.showError(err instanceof Error ? err.message : t(language, "admin.updateFailed"));
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  async function movePerson(boardId: number, personId: number, direction: "up" | "down") {
-    setSaving(true);
-    try {
-      await api(`/api/admin/people/${personId}/move`, {
-        method: "POST",
-        body: JSON.stringify({ direction })
-      });
-      await loadPeople(boardId);
-    } catch (err) {
-      toast.showError(err instanceof Error ? err.message : t(language, "admin.reorderFailed"));
-    } finally {
-      setSaving(false);
-    }
-  }
-
   async function deleteBoard(boardId: number) {
     setSaving(true);
     try {
       await api(`/api/admin/boards/${boardId}`, { method: "DELETE" });
       toast.showSuccess(t(language, "admin.boardDeleted"));
-      setManagingBoardId(null);
       await loadBoards();
     } catch (err) {
       toast.showError(err instanceof Error ? err.message : t(language, "board.deleteFailed"));
@@ -235,10 +137,8 @@ export function AdminPage({
     );
   }
 
-  const managedBoard = boards.find((b) => b.id === managingBoardId) ?? null;
-
   return (
-    <main className="admin-page">
+    <main className="admin-page admin-overview-page">
       <Topbar
         left={<span className="topbar-title">{t(language, "admin.title")}</span>}
         right={
@@ -297,15 +197,21 @@ export function AdminPage({
               <div className="boards-table-head">
                 <span>{t(language, "admin.name")}</span>
                 <span>{t(language, "admin.slug")}</span>
+                <span>{t(language, "admin.createdAt")}</span>
+                <span>{t(language, "admin.updatedAt")}</span>
+                <span>{t(language, "admin.lastAccessedAt")}</span>
                 <span />
               </div>
               {boards.map((b) => (
                 <div key={b.id} className="boards-table-row">
-                  <span>{b.name}</span>
-                  <span>
+                  <span className="boards-cell boards-name" data-label={t(language, "admin.name")}>{b.name}</span>
+                  <span className="boards-cell boards-slug" data-label={t(language, "admin.slug")}>
                     <code>/{b.slug}</code>
                   </span>
-                  <span className="row-actions">
+                  <span className="boards-cell boards-meta" data-label={t(language, "admin.createdAt")}>{displayDateTime(b.created_at)}</span>
+                  <span className="boards-cell boards-meta" data-label={t(language, "admin.updatedAt")}>{displayDateTime(b.updated_at)}</span>
+                  <span className="boards-cell boards-meta" data-label={t(language, "admin.lastAccessedAt")}>{displayDateTime(b.last_accessed_at)}</span>
+                  <span className="row-actions" data-label={t(language, "admin.actions")}>
                     <a
                       className="btn icon ghost-quiet"
                       href={`/b/${b.slug}`}
@@ -316,13 +222,23 @@ export function AdminPage({
                     >
                       <ExternalLink size={16} />
                     </a>
-                    <button
-                      type="button"
-                      className="btn ghost"
-                      onClick={() => setManagingBoardId(b.id)}
-                    >
-                      <Settings size={14} /> {t(language, "admin.manage")}
-                    </button>
+                    <ConfirmInline
+                      message={t(language, "manage.deleteBoardConfirm", { name: b.name })}
+                      language={language}
+                      onConfirm={() => deleteBoard(b.id)}
+                      trigger={(open) => (
+                        <button
+                          type="button"
+                          className="btn icon ghost-quiet"
+                          onClick={open}
+                          disabled={saving}
+                          aria-label={t(language, "manage.deleteBoard")}
+                          title={t(language, "manage.deleteBoard")}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      )}
+                    />
                   </span>
                 </div>
               ))}
@@ -331,24 +247,6 @@ export function AdminPage({
         </section>
       </section>
 
-      {managedBoard ? (
-        <BoardManageModal
-          key={managedBoard.id}
-          board={managedBoard}
-          people={people}
-          language={language}
-          saving={saving}
-          onClose={() => setManagingBoardId(null)}
-          onUpdateBoard={(patch) => updateBoard(managedBoard.id, patch)}
-          onDeleteBoard={() => deleteBoard(managedBoard.id)}
-          onAddPerson={(n, g) => addPerson(managedBoard.id, n, g)}
-          onUpdatePerson={(person, patch) =>
-            updatePerson(managedBoard.id, person, patch)
-          }
-          onRemovePerson={(pid) => removePerson(managedBoard.id, pid)}
-          onMovePerson={(pid, dir) => movePerson(managedBoard.id, pid, dir)}
-        />
-      ) : null}
     </main>
   );
 }

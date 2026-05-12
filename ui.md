@@ -45,9 +45,19 @@ This file defines the visual design language of the app. All new UI must follow 
 
 - Single cohesive panel layout (no split dashboard). `admin-stack` capped at 880px.
 - Compact create-board form at top (name, password, submit).
-- Boards displayed as table rows: Name, Slug, Actions (Manage / Open).
-- "Manage" opens `BoardManageModal` as a popover, not inline.
+- Boards displayed as overview rows: Name, Slug, Created, Updated, Last accessed, Actions.
+- Desktop overview uses a wide admin container and aligned fixed/flexible grid columns.
+- Mobile overview renders each board row as a labeled card using `data-label` cell labels; never show unlabeled blobs of metadata.
+- Actions: open board, delete board.
+- Root admin does not edit board properties or people.
 - Empty-state placeholder when zero boards exist.
+
+### Board Admin Modal
+
+- Opened from a gear icon in the board header. Desktop keeps the gear beside the board identity; mobile moves it into the right-side icon group so it aligns with language/theme controls.
+- Large modal: settings, people, danger zone.
+- Uses a top-right X and no footer; it is a long management surface, not a submit-once form.
+- Settings edits board name, board password, and optional separate board-admin password.
 - Person rows use stacked Up/Down chevron buttons for reorder.
 - Accent suppressed on admin: plain buttons, neutral inline-edit borders.
 
@@ -58,6 +68,8 @@ Brand-led hero, not a panel:
 - Eyebrow row with accent dot and uppercase product name (**Simple Meal Plan**).
 - Localized large title.
 - Localized one-sentence product summary.
+- Primary create-board button opens a modal.
+- Invisible Turnstile runs on root page load. The create-board modal shows verification status and disables submit until a token exists.
 - CTA hint: pill-styled `<code>/b/<slug></code>`.
 - Brand attribution: "Simple Meal Plan by **Luca Schlomski**" (localized connector).
 - Soft accent radial glow behind hero. Subtle fade-up entrance animation.

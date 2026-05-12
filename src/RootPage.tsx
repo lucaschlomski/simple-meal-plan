@@ -1,0 +1,129 @@
+import { FormEvent, useCallback, useRef, useState } from "react";
+import { LanguageToggle } from "./components/LanguageToggle";
+import { ThemeToggle } from "./components/ThemeToggle";
+import { Turnstile, type TurnstileStatus } from "./components/Turnstile";
+import { useFocusTrap } from "./hooks/useFocusTrap";
+import { api } from "./lib/api";
+import { t } from "./lib/i18n";
+import type { AdminBoard, LanguageMode, ThemeMode } from "./lib/types";
+
+function turnstileMessage(language: LanguageMode, status: TurnstileStatus): string {
+  if (status === "missing") return t(language, "turnstile.missing");
+  if (status === "failed") return t(language, "turnstile.failed");
+  if (status === "expired") return t(language, "turnstile.expired");
+  if (status === "verified") return t(language, "turnstile.verified");
+  return t(language, "turnstile.verifying");
+}
+
+function CreateBoardModal({ language, saving, turnstileStatus, turnstileToken, onClose, onCreate }: {
+  language: LanguageMode;
+  saving: boolean;
+  turnstileStatus: TurnstileStatus;
+  turnstileToken: string;
+  onClose: () => void;
+  onCreate: (name: string, password: string, token: string) => Promise<void>;
+}) {
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const modalRef = useRef<HTMLFormElement>(null);
+  useFocusTrap(modalRef, true, onClose);
+  const waitingForVerification = !turnstileToken;
+
+  async function submit(e: FormEvent) {
+    e.preventDefault();
+    setError(null);
+    if (!turnstileToken) return;
+    try {
+      await onCreate(name, password, turnstileToken);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t(language, "root.createFailed"));
+    }
+  }
+
+  return (
+    <div className="modal-backdrop" onMouseDown={onClose}>
+      <form ref={modalRef} className="modal" onMouseDown={(e) => e.stopPropagation()} onSubmit={submit} role="dialog" aria-modal="true">
+        <header className="modal-head">
+          <h2>{t(language, "root.createBoard")}</h2>
+        </header>
+        <div className="modal-content">
+          <p className="modal-intro">{t(language, "root.createBoardDescription")}</p>
+          <label>
+            {t(language, "root.boardName")}
+            <input className="field" value={name} onChange={(e) => setName(e.target.value)} required autoFocus />
+          </label>
+          <label>
+            {t(language, "root.boardPassword")}
+            <input className="field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </label>
+          <p className="helper-text">{t(language, "root.boardPasswordHelp")}</p>
+          {error ? <p className="error-text">{error}</p> : null}
+        </div>
+        <footer className="modal-foot">
+          <p className={`helper-text verification-status ${waitingForVerification ? "verification-pending" : ""}`}>{turnstileMessage(language, turnstileStatus)}</p>
+          <button type="button" className="btn ghost" onClick={onClose} disabled={saving}>{t(language, "meal.cancel")}</button>
+          <button className="btn primary" type="submit" disabled={saving || waitingForVerification}>{saving ? t(language, "root.creating") : waitingForVerification ? t(language, "turnstile.verifyingShort") : t(language, "admin.create")}</button>
+        </footer>
+      </form>
+    </div>
+  );
+}
+
+export function RootPage({ theme, onToggleTheme, language, onToggleLanguage }: {
+  theme: ThemeMode;
+  onToggleTheme: () => void;
+  language: LanguageMode;
+  onToggleLanguage: () => void;
+}) {
+  const [creating, setCreating] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [turnstileStatus, setTurnstileStatus] = useState<TurnstileStatus>("loading");
+  const [turnstileToken, setTurnstileToken] = useState("");
+
+  const onTurnstileToken = useCallback((token: string) => {
+    setTurnstileToken(token);
+  }, []);
+
+  const onTurnstileStatus = useCallback((status: TurnstileStatus) => {
+    setTurnstileStatus(status);
+  }, []);
+
+  async function createBoard(name: string, password: string, turnstileToken: string) {
+    setSaving(true);
+    try {
+      const data = await api<{ ok: true; board: AdminBoard }>("/api/boards", {
+        method: "POST",
+        body: JSON.stringify({ name, password, turnstileToken })
+      });
+      window.location.href = `/b/${data.board.slug}`;
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <main className="center-shell landing">
+      <Turnstile onStatus={onTurnstileStatus} onToken={onTurnstileToken} />
+      <div className="corner-actions">
+        <LanguageToggle language={language} onToggle={onToggleLanguage} />
+        <ThemeToggle theme={theme} onToggle={onToggleTheme} language={language} />
+      </div>
+      <div className="landing-glow" aria-hidden="true" />
+      <section className="landing-hero">
+        <div className="landing-mark">
+          <span className="landing-dot" aria-hidden="true" />
+          <span className="landing-eyebrow">{t(language, "root.eyebrow")}</span>
+        </div>
+        <h1 className="landing-title">{t(language, "root.title")}</h1>
+        <p className="landing-tagline muted-text">{t(language, "root.tagline")}</p>
+        <div className="landing-actions">
+          <button className="btn primary landing-create-btn" type="button" onClick={() => setCreating(true)}>{t(language, "root.createBoard")}</button>
+        </div>
+        <p className="landing-cta">{t(language, "root.cta")} <code>/b/&lt;slug&gt;</code></p>
+        <p className="landing-attribution">{t(language, "root.by")} <strong>Luca Schlomski</strong></p>
+      </section>
+      {creating ? <CreateBoardModal language={language} saving={saving} turnstileStatus={turnstileStatus} turnstileToken={turnstileToken} onClose={() => setCreating(false)} onCreate={createBoard} /> : null}
+    </main>
+  );
+}
