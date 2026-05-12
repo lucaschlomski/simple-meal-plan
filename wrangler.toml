@@ -1,7 +1,6 @@
 name = "simple-meal-plan"
 compatibility_date = "2026-05-06"
 pages_build_output_dir = "dist"
-account_id = "8b1e9fa39a0d7a3b5e2663e613c78e2d"
 
 # ---------------------------------------------------------------------------
 # Production environment (default)

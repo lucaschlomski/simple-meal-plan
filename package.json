@@ -11,9 +11,9 @@
     "check": "tsc --noEmit",
     "db:migrate:local": "wrangler d1 migrations apply SimpleMealPlan-Production --local",
     "db:seed:local": "wrangler d1 execute SimpleMealPlan-Production --local --file db/seed.sql",
-    "db:migrate:prod": "wrangler d1 migrations apply SimpleMealPlan-Production --remote",
-    "db:migrate:preview": "wrangler d1 migrations apply SimpleMealPlan-Preview --remote --env preview",
-    "db:seed:preview": "wrangler d1 execute SimpleMealPlan-Preview --remote --env preview --file db/seed.sql",
+    "db:migrate:prod": "CLOUDFLARE_ACCOUNT_ID=8b1e9fa39a0d7a3b5e2663e613c78e2d wrangler d1 migrations apply SimpleMealPlan-Production --remote",
+    "db:migrate:preview": "CLOUDFLARE_ACCOUNT_ID=8b1e9fa39a0d7a3b5e2663e613c78e2d wrangler d1 migrations apply SimpleMealPlan-Preview --remote --env preview",
+    "db:seed:preview": "CLOUDFLARE_ACCOUNT_ID=8b1e9fa39a0d7a3b5e2663e613c78e2d wrangler d1 execute SimpleMealPlan-Preview --remote --env preview --file db/seed.sql",
     "deploy:preview": "set -a && . .dev.vars && set +a && npm run build && wrangler pages deploy dist --project-name simple-meal-plan --branch preview",
     "test": "vitest run"
   },
