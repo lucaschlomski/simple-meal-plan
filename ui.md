@@ -4,7 +4,7 @@ This file defines the visual design language of the app. All new UI must follow 
 
 ## Product Scope
 
-- Goal: simple meal planner for holidays with a Kanban-style board.
+- Goal: Simple Meal Plan — shared meal planning for trips and holidays with a Kanban-style board.
 - Each day is one column.
 - Meals are cards inside each day column.
 - Card shows: meal name (can be empty), meal type badge, cook text, attendee chips, attendee count (sum of group sizes).
@@ -55,11 +55,11 @@ This file defines the visual design language of the app. All new UI must follow 
 
 Brand-led hero, not a panel:
 
-- Eyebrow row with accent dot and uppercase product name.
+- Eyebrow row with accent dot and uppercase product name (**Simple Meal Plan**).
 - Localized large title.
 - Localized one-sentence product summary.
 - CTA hint: pill-styled `<code>/b/<slug></code>`.
-- Localized attribution with **Luca Schlomski**.
+- Brand attribution: "Simple Meal Plan by **Luca Schlomski**" (localized connector).
 - Soft accent radial glow behind hero. Subtle fade-up entrance animation.
 
 This is the only screen where accent is allowed decoratively. Do not propagate this exception to other pages.

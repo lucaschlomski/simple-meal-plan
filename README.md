@@ -1,6 +1,6 @@
-# Meal Planner
+# Simple Meal Plan
 
-Simple meal planner for holidays with a Kanban-style board. Each day is a column, meals are cards.
+Shared meal-planning board for trips and holidays. Each day is a column, meals are cards.
 
 Stack: Cloudflare Pages + Functions + D1. React 18, TypeScript, Vite 5.
 
@@ -149,7 +149,7 @@ Hooks in `src/hooks/`:
 
 | Hook | Detail |
 |---|---|
-| `useTheme` | Persists to `localStorage` key `meal-planner-theme`. Follows `prefers-color-scheme` on first visit. |
+| `useTheme` | Persists to `localStorage` key `mp_theme`. Follows `prefers-color-scheme` on first visit. |
 | `useLanguage` | Persists to `localStorage` key `mp_language`. Updates `<html lang>`. |
 | `useFocusTrap` | Skips elements with `data-focus-skip` attribute. Restores focus to the active element from before the trap activated on unmount. |
 | `useOutsideClick` | Registers on `mousedown` (not `click`), so it fires before other click handlers. |

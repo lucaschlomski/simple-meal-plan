@@ -2,11 +2,11 @@ import type { LanguageMode, MealType } from "./types";
 
 const messages = {
   en: {
-    "root.eyebrow": "Meal Planner",
+    "root.eyebrow": "Simple Meal Plan",
     "root.title": "Plan meals together.",
     "root.tagline": "A simple, shared meal board for trips and holidays.",
     "root.cta": "Open a board at",
-    "root.by": "an app by",
+    "root.by": "by",
 
     "theme.toLight": "Switch to light mode",
     "theme.toDark": "Switch to dark mode",
@@ -24,7 +24,7 @@ const messages = {
     "board.dayLabel": "Day {n}",
     "board.addMeal": "Add meal",
     "board.today": "Today",
-    "board.by": "an app by Luca Schlomski",
+    "board.by": "Simple Meal Plan by Luca Schlomski",
     "board.mealAdded": "Meal added",
     "board.mealUpdated": "Meal updated",
     "board.mealDeleted": "Meal deleted",
@@ -136,11 +136,11 @@ const messages = {
     "stepper.increase": "Increase"
   },
   de: {
-    "root.eyebrow": "Essensplaner",
+    "root.eyebrow": "Simple Meal Plan",
     "root.title": "Gemeinsam Mahlzeiten planen.",
     "root.tagline": "Ein einfacher gemeinsamer Essensplan für Reisen und Urlaube.",
     "root.cta": "Board öffnen unter",
-    "root.by": "eine App von",
+    "root.by": "von",
 
     "theme.toLight": "Zum hellen Modus wechseln",
     "theme.toDark": "Zum dunklen Modus wechseln",
@@ -158,7 +158,7 @@ const messages = {
     "board.dayLabel": "Tag {n}",
     "board.addMeal": "Mahlzeit hinzufügen",
     "board.today": "Heute",
-    "board.by": "eine App von Luca Schlomski",
+    "board.by": "Simple Meal Plan von Luca Schlomski",
     "board.mealAdded": "Mahlzeit hinzugefügt",
     "board.mealUpdated": "Mahlzeit aktualisiert",
     "board.mealDeleted": "Mahlzeit gelöscht",
@@ -191,14 +191,14 @@ const messages = {
     "meal.notSet": "Unbekannte Mahlzeit",
     "meal.editAria": "{name} bearbeiten",
     "meal.editFallback": "Mahlzeit ohne Namen",
-    "meal.totalAttendees": "Teilnehmende gesamt",
+    "meal.totalAttendees": "Teilnehmer gesamt",
 
     "mealType.breakfast": "Frühstück",
     "mealType.lunch": "Mittag",
     "mealType.dinner": "Abend",
     "mealType.other": "Sonstiges",
 
-    "attendees.label": "Teilnehmende",
+    "attendees.label": "Teilnehmer",
     "attendees.search": "Personen suchen",
     "attendees.closePicker": "Auswahl schließen",
     "attendees.openPicker": "Auswahl öffnen",

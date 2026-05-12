@@ -172,7 +172,7 @@ All endpoints follow these conventions:
 
 ### Utility
 
-- `GET /api/health` — returns `{ ok: true, service: "meal-planner-api" }`
+- `GET /api/health` — returns `{ ok: true, service: "simple-meal-plan-api" }`
 - `GET /api/admin/session` — admin session check, returns `{ ok: true }` or 401
 - `GET /api/boards/:slug/session` — board session check
 

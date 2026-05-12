@@ -3,7 +3,7 @@ import type { ThemeMode } from "../lib/types";
 
 export function useTheme() {
   const initial = (): ThemeMode => {
-    const stored = window.localStorage.getItem("meal-planner-theme");
+    const stored = window.localStorage.getItem("mp_theme");
     if (stored === "dark" || stored === "light") return stored;
     return window.matchMedia("(prefers-color-scheme: dark)").matches
       ? "dark"
@@ -14,7 +14,7 @@ export function useTheme() {
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-    window.localStorage.setItem("meal-planner-theme", theme);
+    window.localStorage.setItem("mp_theme", theme);
   }, [theme]);
 
   return {

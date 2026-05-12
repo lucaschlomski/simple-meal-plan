@@ -1,3 +1,3 @@
 export const onRequestGet: PagesFunction = async () => {
-  return Response.json({ ok: true, service: "meal-planner-api" });
+  return Response.json({ ok: true, service: "simple-meal-plan-api" });
 };

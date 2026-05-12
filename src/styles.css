@@ -1096,15 +1096,25 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
   color: var(--fg-muted);
   opacity: 0.55;
 }
+.date-picker-overlay .rdp-selected {
+  border: none;
+}
 .date-picker-overlay .rdp-selected .rdp-day_button,
-.date-picker-overlay .rdp-selected .rdp-day_button:hover {
+.date-picker-overlay .rdp-selected .rdp-day_button:hover,
+.date-picker-overlay .rdp-selected .rdp-day_button:focus,
+.date-picker-overlay .rdp-selected .rdp-day_button:focus-visible {
   background: var(--accent);
   color: var(--accent-fg);
   font-weight: 600;
+  border: none;
+  outline: none;
+  box-shadow: none;
 }
+/* Today: accent-colored ring, no fill */
 .date-picker-overlay .rdp-today:not(.rdp-selected) .rdp-day_button {
   color: var(--accent);
   font-weight: 600;
+  box-shadow: 0 0 0 1.5px var(--accent);
 }
 .date-picker-overlay .rdp-chevron {
   fill: var(--fg-muted);
