@@ -1,6 +1,7 @@
 name = "simple-meal-plan"
 compatibility_date = "2026-05-06"
 pages_build_output_dir = "dist"
+account_id = "8b1e9fa39a0d7a3b5e2663e613c78e2d"
 
 # ---------------------------------------------------------------------------
 # Production environment (default)
@@ -34,6 +35,11 @@ migrations_dir = "db/migrations"
 # ---------------------------------------------------------------------------
 
 [env.preview]
+
+[env.preview.vars]
+# Duplicated from [vars] to suppress wrangler's "vars not inherited" warning.
+# For manual CLI deploys, the actual build-time value comes from .dev.vars.
+VITE_TURNSTILE_SITE_KEY = "0x4AAAAAADN_TfcYPaaGveNy"
 
 [[env.preview.d1_databases]]
 binding = "DB"
