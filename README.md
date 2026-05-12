@@ -95,7 +95,7 @@ Reusable building blocks in `src/components/`. Reuse before creating new compone
 | `Stepper` | Numeric +/− control for `group_size`. |
 | `SegmentedControl` | Type-tinted segmented selector for meal types. |
 | `DatePicker` | Hybrid touch/desktop date picker. Keyboard accepts `dd/mm/yyyy`, `dd.mm.yyyy`, `dd-mm-yyyy`, or `ddmmyyyy`. Enter commits, blur commits. Invalid input left in place. |
-| `Topbar` | Sticky top bar with scroll-aware bottom border. Title + right-side actions. |
+| `Topbar` | Desktop: sticky, scroll-aware bottom border. Mobile: static, solid var(--bg), no backdrop-filter. Title + right-side actions. |
 | `ThemeToggle` | Icon-only light/dark toggle, language-aware labels. |
 | `LanguageToggle` | One-click EN/DE toggle. |
 
@@ -118,6 +118,7 @@ Hooks in `src/hooks/`:
 - Meal modal renders all fields by default. No progressive disclosure.
 - Meal modal field order (top to bottom): meal name, type, cook, date, attendees, notes.
 - Destructive actions inside modals use `ConfirmInline`, never native `confirm`.
+- Create-board modal on mobile suppresses initial field autofocus to prevent iOS keyboard layout shift on open.
 
 ### Board Creation and Admin
 

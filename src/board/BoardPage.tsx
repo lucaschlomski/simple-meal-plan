@@ -302,7 +302,7 @@ export function BoardPage({
         ) : null}
         <p className="board-attribution">
           {t(language, "board.by")}
-          {" · "}
+          <span className="board-kofi-sep">{" · "}</span>
           <button
             type="button"
             className="board-kofi-link"

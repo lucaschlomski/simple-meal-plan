@@ -27,7 +27,8 @@ function CreateBoardModal({ language, saving, turnstileStatus, turnstileToken, o
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const modalRef = useRef<HTMLFormElement>(null);
-  useFocusTrap(modalRef, true, onClose);
+  const shouldAutoFocus = window.matchMedia("(min-width: 700px)").matches;
+  useFocusTrap(modalRef, true, onClose, shouldAutoFocus);
   const waitingForVerification = !turnstileToken;
 
   async function submit(e: FormEvent) {
@@ -43,7 +44,7 @@ function CreateBoardModal({ language, saving, turnstileStatus, turnstileToken, o
 
   return (
     <div className="modal-backdrop" onMouseDown={onClose}>
-      <form ref={modalRef} className="modal" onMouseDown={(e) => e.stopPropagation()} onSubmit={submit} role="dialog" aria-modal="true">
+      <form ref={modalRef} className="modal create-board-modal" onMouseDown={(e) => e.stopPropagation()} onSubmit={submit} role="dialog" aria-modal="true">
         <header className="modal-head">
           <h2>{t(language, "root.createBoard")}</h2>
         </header>
@@ -51,7 +52,7 @@ function CreateBoardModal({ language, saving, turnstileStatus, turnstileToken, o
           <p className="modal-intro">{t(language, "root.createBoardDescription")}</p>
           <label>
             {t(language, "root.boardName")}
-            <input className="field" value={name} onChange={(e) => setName(e.target.value)} required autoFocus />
+            <input className="field" value={name} onChange={(e) => setName(e.target.value)} required autoFocus={shouldAutoFocus} />
           </label>
           <label>
             {t(language, "root.boardPassword")}

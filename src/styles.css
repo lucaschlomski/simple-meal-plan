@@ -477,6 +477,9 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
   left: 50% !important;
   transform: translateX(-50%) !important;
   right: auto !important;
+  /* Lock width so Ko-fi's ≤550px media query (width: auto) can't break the
+     centering transform. 180px matches Ko-fi's own max-width on the base rule. */
+  width: 180px !important;
 }
 .floating-chat-kofi-popup-iframe,
 .floating-chat-kofi-popup-iframe-mobi {
@@ -936,6 +939,21 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
    panel + shadow keeps it distinct without a backdrop. */
 @media (max-width: 699px) {
   .modal-backdrop { background: transparent; }
+
+  .create-board-modal .modal-foot {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .create-board-modal .verification-status {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .create-board-modal .modal-foot .btn {
+    min-width: 0;
+  }
 }
 
 .modal {
@@ -1630,6 +1648,13 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
      the day-column's inner bottom padding (var(--s-2) = 8px), and the grid
      gap between dots and attribution equals the same value so both sides
      of the dot row feel symmetric. */
+  /* iOS Safari keeps browser chrome tint stale when the mobile header is sticky. */
+  .topbar {
+    position: static;
+    background: var(--bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
   .board-foot { padding: 4px 0 2px; gap: 4px; }
   /* Remove per-element vertical padding; board-foot handles spacing. */
   .day-pagination { padding: 0; gap: 6px; }
@@ -1648,6 +1673,10 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
     line-height: 1.6;
     white-space: normal; /* allow wrap to two lines */
   }
+  /* Force support link onto its own line so attribution is always two lines */
+  .board-kofi-link { display: block; text-align: center; width: 100%; }
+  /* Hide the inline dot separator — not needed when link is on its own line */
+  .board-kofi-sep { display: none; }
   .segmented button {
     padding: 8px 5px;
     font-size: var(--text-xs);

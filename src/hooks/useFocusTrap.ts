@@ -6,7 +6,8 @@ const FOCUSABLE =
 export function useFocusTrap(
   ref: RefObject<HTMLElement>,
   active: boolean,
-  onEscape?: () => void
+  onEscape?: () => void,
+  initialFocus = true
 ) {
   // Keep the callback in a ref so effect identity is tied only to `active`.
   // Without this, callers passing inline arrow functions (e.g.
@@ -30,8 +31,10 @@ export function useFocusTrap(
         (el) => !el.hasAttribute("data-focus-skip")
       );
 
-    const initial = focusables()[0];
-    initial?.focus();
+    if (initialFocus) {
+      const initial = focusables()[0];
+      initial?.focus();
+    }
 
     function handle(e: KeyboardEvent) {
       if (e.key === "Escape") {
@@ -59,5 +62,5 @@ export function useFocusTrap(
       document.removeEventListener("keydown", handle);
       previouslyFocused?.focus?.();
     };
-  }, [active, ref]);
+  }, [active, ref, initialFocus]);
 }
