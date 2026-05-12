@@ -9,6 +9,7 @@
   - admin: `/admin`
 - No routing library. Routing is done via `window.location.pathname` matching in `App.tsx`:
   - `/admin` → AdminPage
+  - `/legal` → LegalPage
   - `/b/:slug` (regex `^\/b\/([a-z0-9-]+)$/i`) → BoardPage
   - `/` → Landing page
 - No global state management (no zustand, redux, context other than Toast). State lives in page components and passes down via props. `language` and `theme` are lifted to `App.tsx`.

@@ -73,7 +73,8 @@ Brand-led hero, not a panel:
 - Invisible Turnstile runs on root page load. The create-board modal shows verification status and disables submit until a token exists. On mobile, verification text is constrained within the modal footer.
 - CTA hint: pill-styled `<code>/b/<slug></code>`.
 - Brand attribution: "Simple Meal Plan by **Luca Schlomski**" (localized connector).
-- Ko-fi floating overlay widget loads on root page mount. Draws once with accent-colored button. Centered at bottom of screen via CSS overrides; mobile uses locked 180px width. Opens a Ko-fi tip panel (380×720px iframe, dark header X close button) without navigating to the Ko-fi profile page.
+- Ko-fi floating overlay widget loads on root page mount. Draws once with accent-colored button. Centered at bottom of screen via CSS overrides; mobile uses locked 180px width, bottom 34px to clear the legal link. Opens a Ko-fi tip panel (380×720px iframe, dark header X close button) without navigating to the Ko-fi profile page.
+- Legal footer link (`.landing-legal`): `fixed` bottom-right on desktop, bottom-center on mobile. Tiny font, muted opacity. Links to `/legal`.
 - Soft accent radial glow behind hero. Subtle fade-up entrance animation.
 
 This is the only screen where accent is allowed decoratively. Do not propagate this exception to other pages.

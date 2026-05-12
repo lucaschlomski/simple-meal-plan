@@ -158,6 +158,7 @@ export function RootPage({ theme, onToggleTheme, language, onToggleLanguage }: {
         </div>
         <p className="landing-cta">{t(language, "root.cta")} <code>/b/&lt;slug&gt;</code></p>
         <p className="landing-attribution">{t(language, "root.by")} <strong>Luca Schlomski</strong></p>
+        <p className="landing-legal"><a href="/legal">{language === "de" ? "Kontakt & Datenschutz" : "Contact & Privacy"}</a></p>
       </section>
       {creating ? <CreateBoardModal language={language} saving={saving} turnstileStatus={turnstileStatus} turnstileToken={turnstileToken} onClose={() => setCreating(false)} onCreate={createBoard} /> : null}
     </main>

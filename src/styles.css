@@ -465,6 +465,65 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
   color: var(--fg);
   font-weight: 600;
 }
+.landing-legal {
+  position: fixed;
+  right: var(--s-3);
+  bottom: var(--s-3);
+  z-index: 2;
+  font-size: 0.625rem;
+  color: var(--fg-muted);
+  opacity: 0.7;
+}
+.landing-legal a,
+.legal-card a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 699px) {
+  .landing-legal {
+    right: 50%;
+    bottom: var(--s-2);
+    transform: translateX(50%);
+    text-align: center;
+  }
+}
+
+.legal-page {
+  min-height: 100dvh;
+  background: var(--bg);
+  display: grid;
+  place-items: start center;
+  padding: var(--s-7) var(--s-4);
+  position: relative;
+}
+.legal-card {
+  width: min(720px, 100%);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--s-5);
+  box-shadow: var(--shadow-md);
+  display: grid;
+  gap: var(--s-5);
+}
+.legal-card section {
+  display: grid;
+  gap: var(--s-2);
+}
+.legal-card p {
+  color: var(--fg-muted);
+  line-height: 1.6;
+}
+.legal-card h1,
+.legal-card h2 {
+  color: var(--fg);
+}
+.legal-back {
+  justify-self: start;
+  font-size: var(--text-sm);
+  color: var(--fg-muted);
+}
 
 /* =========================================================================
    Ko-fi floating chat widget overrides
@@ -488,6 +547,17 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
   right: auto !important;
   /* Cap height; Ko-fi's JS sets height via inline style based on viewport */
   max-height: 480px !important;
+}
+
+@media (max-width: 699px) {
+  .floatingchat-container-wrap,
+  .floatingchat-container-wrap-mobi {
+    bottom: 34px !important;
+  }
+  .floating-chat-kofi-popup-iframe,
+  .floating-chat-kofi-popup-iframe-mobi {
+    bottom: 92px !important;
+  }
 }
 
 /* =========================================================================
