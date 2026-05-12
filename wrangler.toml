@@ -2,7 +2,21 @@ name = "simple-meal-plan"
 compatibility_date = "2026-05-06"
 pages_build_output_dir = "dist"
 
+# ---------------------------------------------------------------------------
+# Production environment (default)
+# ---------------------------------------------------------------------------
+# Secrets (ADMIN_PASSWORD, SESSION_SIGNING_KEY, TURNSTILE_SECRET_KEY) are set
+# via the Cloudflare Pages dashboard — never commit them here.
+# Local equivalents live in .dev.vars (gitignored).
+# ---------------------------------------------------------------------------
+
 [vars]
+# Public Cloudflare Turnstile site key. Baked into the frontend JS bundle at
+# build time by Vite. Safe to commit — the value is visible in the browser.
+# Replace with your actual site key from the Cloudflare Turnstile dashboard.
+# For local dev and manual preview deploys, set this in .dev.vars instead;
+# the dev:cf and deploy:preview scripts source .dev.vars before building.
+VITE_TURNSTILE_SITE_KEY = "0x4AAAAAADN_TfcYPaaGveNy"
 
 [[d1_databases]]
 binding = "DB"
@@ -10,9 +24,16 @@ database_name = "SimpleMealPlan-Production"
 database_id = "c5028b53-11bc-4234-b254-893979ff1668"
 migrations_dir = "db/migrations"
 
-[env.preview]
+# ---------------------------------------------------------------------------
+# Preview environment
+# Preview is deployed manually via `npm run deploy:preview` (CLI direct
+# upload, not a Cloudflare-triggered Git build). No [vars] section is needed
+# here because build-time env vars are sourced from .dev.vars locally before
+# the build runs. Runtime secrets are set in the Cloudflare Pages dashboard
+# under the Preview environment.
+# ---------------------------------------------------------------------------
 
-[env.preview.vars]
+[env.preview]
 
 [[env.preview.d1_databases]]
 binding = "DB"

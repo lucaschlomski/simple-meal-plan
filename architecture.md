@@ -270,7 +270,6 @@ All endpoints follow these conventions:
 
 ## Explicitly Rejected for MVP
 
-- Per-board admin password separate from global admin area.
 - User identity tracking or edit attribution.
 - Audit/change history.
 - KV cache for attendees/board data.
@@ -290,12 +289,22 @@ npm run db:seed:local
 
 ### `.dev.vars` (required)
 
-Create a `.dev.vars` file in the project root (gitignored):
+Create a `.dev.vars` file in the project root (gitignored). This is the single
+source for all local secrets and the Turnstile site key. Both `dev:cf` and
+`deploy:preview` source this file before running the Vite build so that
+`VITE_TURNSTILE_SITE_KEY` is baked into the bundle:
 
 ```
 ADMIN_PASSWORD=admin
 SESSION_SIGNING_KEY=dev-session-key
+TURNSTILE_SECRET_KEY=your-turnstile-secret-key
+VITE_TURNSTILE_SITE_KEY=your-turnstile-site-key
 ```
+
+No `.env.local` or `.env.preview` files are needed. `.dev.vars` covers local
+dev and manual preview deploys. Production Git-triggered builds read
+`VITE_TURNSTILE_SITE_KEY` from `wrangler.toml [vars]` and secrets from the
+Cloudflare Pages dashboard.
 
 ### Start
 
@@ -303,7 +312,7 @@ SESSION_SIGNING_KEY=dev-session-key
 npm run dev:cf
 ```
 
-Builds the app, applies pending local D1 migrations and seed, then starts a local Cloudflare Pages emulator at `http://localhost:8788`.
+Sources `.dev.vars`, builds the app (making `VITE_TURNSTILE_SITE_KEY` available to Vite), applies pending local D1 migrations and seed, then starts a local Cloudflare Pages emulator at `http://localhost:8788`. Wrangler reads `.dev.vars` automatically for Functions runtime secrets.
 
 ### Demo access
 
@@ -335,7 +344,8 @@ Builds the app, applies pending local D1 migrations and seed, then starts a loca
 
 1. Connect GitHub repo in Workers & Pages → `simple-meal-plan` → Settings → Build & Deployments. Production branch: `main`. Build command: `npm run build`, output: `dist`. Do **not** add `preview` as a tracked branch.
 2. Settings → Functions → D1 Database Bindings: map `DB` to `SimpleMealPlan-Production` (Production) and `SimpleMealPlan-Preview` (Preview).
-3. Settings → Environment variables: set `ADMIN_PASSWORD` and `SESSION_SIGNING_KEY` for both environments. Preview uses dev values, Production uses real secrets.
+3. Settings → Environment variables: set `VITE_TURNSTILE_SITE_KEY` as a plain variable for both environments. This is a public key baked into the JS bundle at build time — safe to set as a variable, not a secret. It is also committed to `wrangler.toml [vars]` as the canonical value for Git-triggered production builds.
+4. Settings → Secrets: set `ADMIN_PASSWORD`, `SESSION_SIGNING_KEY`, and `TURNSTILE_SECRET_KEY` as secrets for both environments. Secrets are runtime-only and never exposed to the build or the browser.
 
 ### Migration workflow
 

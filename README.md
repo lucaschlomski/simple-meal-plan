@@ -13,18 +13,15 @@ npm run db:seed:local
 npm run dev:cf
 ```
 
-Create a `.dev.vars` file (gitignored):
+Create a `.dev.vars` file in the project root (gitignored). This single file
+covers all secrets and the Turnstile site key for both local dev and manual
+preview deploys — `dev:cf` and `deploy:preview` source it before building:
 
 ```
 ADMIN_PASSWORD=admin
 SESSION_SIGNING_KEY=dev-session-key
-TURNSTILE_SECRET_KEY=dev-secret
-```
-
-Create a `.env.local` file for Vite-exposed build-time values:
-
-```
-VITE_TURNSTILE_SITE_KEY=dev-site-key
+TURNSTILE_SECRET_KEY=your-turnstile-secret-key
+VITE_TURNSTILE_SITE_KEY=your-turnstile-site-key
 ```
 
 Local server at `http://localhost:8788`. Demo board: `/b/echo-harbor-amber` (password: `demo123`).

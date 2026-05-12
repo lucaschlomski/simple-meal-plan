@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:cf": "npm run build && npm run db:migrate:local && npm run db:seed:local && wrangler pages dev dist",
+    "dev:cf": "set -a && . .dev.vars && set +a && npm run build && npm run db:migrate:local && npm run db:seed:local && wrangler pages dev dist",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "check": "tsc --noEmit",
@@ -14,7 +14,7 @@
     "db:migrate:prod": "wrangler d1 migrations apply SimpleMealPlan-Production --remote",
     "db:migrate:preview": "wrangler d1 migrations apply SimpleMealPlan-Preview --remote --env preview",
     "db:seed:preview": "wrangler d1 execute SimpleMealPlan-Preview --remote --env preview --file db/seed.sql",
-    "deploy:preview": "npm run build && wrangler pages deploy dist --project-name simple-meal-plan --branch preview",
+    "deploy:preview": "set -a && . .dev.vars && set +a && npm run build && wrangler pages deploy dist --project-name simple-meal-plan --branch preview",
     "test": "vitest run"
   },
   "dependencies": {
