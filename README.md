@@ -107,6 +107,7 @@ Hooks in `src/hooks/`:
 ### Modal Behaviour
 
 - All modals trap focus via `useFocusTrap`.
+- Modals close via backdrop click or the footer Cancel/Done button. No X button in the header.
 - Esc closes the modal. Cmd/Ctrl+Enter submits. Plain Enter inside any single-line field submits.
 - Nested popovers (attendee dropdown, confirm popover, date picker calendar) intercept Esc with `stopPropagation()`. Closing a nested popover must not close the surrounding modal. Press Esc twice to exit the modal from a nested popover.
 - Meal modal renders all fields by default. No progressive disclosure.
@@ -115,7 +116,7 @@ Hooks in `src/hooks/`:
 
 ### Meal Card Behaviour
 
-- Head row: meal-type badge (left) + attendee count (right).
+- Head row: meal-type badge (left) + attendee count (right). Count is hidden when 0.
 - Title: meal name + cook subtitle with `ChefHat` icon (same row).
 - Attendee chips: cap 20 per card. Overflow renders as `+N` chip. Never display `×N` group counts.
 - Empty meal name shows localized placeholder text.

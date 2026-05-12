@@ -5,7 +5,7 @@ import {
   useRef,
   useState
 } from "react";
-import { Trash2, X } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import type { LanguageMode, Meal, MealType, Person } from "../lib/types";
 import { MEAL_TYPES } from "../lib/types";
 import { fmtDate } from "../lib/dates";
@@ -141,14 +141,7 @@ export function MealModal({
                 )}
               />
             ) : null}
-            <button
-              type="button"
-              className="btn icon ghost-quiet"
-              onClick={onClose}
-              aria-label={t(language, "meal.close")}
-            >
-              <X size={18} />
-            </button>
+
           </div>
         </header>
 

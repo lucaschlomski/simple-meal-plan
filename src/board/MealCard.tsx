@@ -42,10 +42,12 @@ export function MealCard({
         <span className={`badge type-${type}`}>
           {mealTypeLabel(language, type)}
         </span>
-        <span className="count" title={t(language, "meal.totalAttendees")}>
-          <Users size={14} />
-          {meal.attendee_count}
-        </span>
+        {meal.attendee_count > 0 && (
+          <span className="count" title={t(language, "meal.totalAttendees")}>
+            <Users size={14} />
+            {meal.attendee_count}
+          </span>
+        )}
       </div>
       <div className="card-title">
         <h3 className={meal.meal_name ? "" : "unset"}>

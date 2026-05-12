@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { ChevronDown, ChevronUp, Trash2, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import type { AdminBoard, LanguageMode, Person } from "../lib/types";
 import { useFocusTrap } from "../hooks/useFocusTrap";
 import { InlineEdit } from "../components/InlineEdit";
@@ -80,14 +80,7 @@ export function BoardManageModal({
             <h2>{t(language, "admin.manage")}</h2>
             <span className="slug-pill">/{board.slug}</span>
           </div>
-          <button
-            type="button"
-            className="btn icon ghost-quiet"
-            onClick={onClose}
-            aria-label={t(language, "meal.close")}
-          >
-            <X size={18} />
-          </button>
+
         </header>
 
         <div className="modal-content">
@@ -218,7 +211,7 @@ export function BoardManageModal({
                 <Trash2 size={14} /> {t(language, "manage.deleteBoard")}
               </button>
             )}
-          />
+            />
           <button
             type="button"
             className="btn ghost"
