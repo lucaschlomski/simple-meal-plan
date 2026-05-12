@@ -14,6 +14,7 @@
     "db:migrate:prod": "wrangler d1 migrations apply SimpleMealPlan-Production --remote",
     "db:migrate:preview": "wrangler d1 migrations apply SimpleMealPlan-Preview --remote --env preview",
     "db:seed:preview": "wrangler d1 execute SimpleMealPlan-Preview --remote --env preview --file db/seed.sql",
+    "deploy:preview": "npm run build && wrangler pages deploy dist --project-name simple-meal-plan --branch preview",
     "test": "vitest run"
   },
   "dependencies": {
