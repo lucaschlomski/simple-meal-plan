@@ -3,10 +3,19 @@ compatibility_date = "2026-05-06"
 pages_build_output_dir = "dist"
 
 [vars]
-# Set production values with `wrangler secret put`.
 
 [[d1_databases]]
 binding = "DB"
-database_name = "SimpleMealPlan-Prod"
-database_id = "eac8892f-1276-44ee-8121-a8368b58ca13"
+database_name = "SimpleMealPlan-Production"
+database_id = "c5028b53-11bc-4234-b254-893979ff1668"
+migrations_dir = "db/migrations"
+
+[env.preview]
+
+[env.preview.vars]
+
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "SimpleMealPlan-Preview"
+database_id = "0718402d-9833-4f57-9318-6a80be6af352"
 migrations_dir = "db/migrations"
