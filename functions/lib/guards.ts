@@ -35,10 +35,11 @@ export async function requireBoardAdminSession(
   request: Request,
   env: Env,
   slug: string,
-  adminPasswordEnabled: boolean
+  adminPasswordEnabled: boolean,
+  boardSessionRequired = true
 ): Promise<boolean> {
   const cookies = parseCookieHeader(request.headers.get("cookie"));
-  if (!(await requireBoardSession(request, env, slug))) return false;
+  if (boardSessionRequired && !(await requireBoardSession(request, env, slug))) return false;
   if (!adminPasswordEnabled) return true;
 
   const token = cookies[getBoardAdminCookieName(slug)];

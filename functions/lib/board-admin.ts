@@ -36,11 +36,13 @@ export async function requireBoardAdminAccess(
   board: BoardAdminRow
 ): Promise<boolean> {
   if (isDemoBoardSlug(board.slug)) return true;
+  const publicBoard = board.board_password_hash === null;
   return requireBoardAdminSession(
     request,
     env,
     board.slug,
-    board.board_admin_password_hash !== null
+    board.board_admin_password_hash !== null,
+    !publicBoard
   );
 }
 

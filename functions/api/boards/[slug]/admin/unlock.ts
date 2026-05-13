@@ -23,6 +23,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ params, request, env }
     return Response.json({ ok: true, board: publicBoardAdmin(board), demo: true });
   }
 
+  if (board.board_password_hash === null && board.board_admin_password_hash === null) {
+    return Response.json({ ok: true, board: publicBoardAdmin(board), public: true });
+  }
+
   const body = (await request.json().catch(() => ({}))) as UnlockBody;
   if (typeof body.password !== "string") {
     return Response.json({ ok: false, error: "PASSWORD_REQUIRED" }, { status: 400 });

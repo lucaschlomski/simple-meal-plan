@@ -82,6 +82,12 @@ export function BoardAdminModal({
           ...(adminPassword.trim() ? { admin_password: adminPassword.trim() } : {})
         })
       });
+      if (boardPassword.trim()) {
+        await api(`/api/boards/${slug}/unlock`, {
+          method: "POST",
+          body: JSON.stringify({ password: boardPassword.trim() })
+        });
+      }
       if (adminPassword.trim()) {
         await api(`/api/boards/${slug}/admin/unlock`, {
           method: "POST",
