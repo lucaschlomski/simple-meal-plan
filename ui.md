@@ -4,7 +4,7 @@ This file defines the visual design language of the app. All new UI must follow 
 
 ## Product Scope
 
-- Goal: Simple Meal Plan — shared meal planning for trips and holidays with a Kanban-style board.
+- Goal: Simple Meal Plan — shared weekly meal planning with a Kanban-style board.
 - Each day is one column.
 - Meals are cards inside each day column.
 - Card shows: meal name (can be empty), meal type badge, cook text, attendee chips, attendee count (sum of group sizes). Count is hidden when 0.

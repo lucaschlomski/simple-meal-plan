@@ -16,7 +16,7 @@
 
 ## Board Model
 
-Top-level planning unit: board (trip-like container).
+Top-level planning unit: board (general weekly planning container).
 
 Board has:
 - name

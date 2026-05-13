@@ -1,6 +1,6 @@
 # Simple Meal Plan
 
-Shared meal-planning board for trips and holidays. Each day is a column, meals are cards — everyone with the link and password can add, edit, and organise meals together.
+Shared weekly meal-planning board. Each day is a column, meals are cards — everyone with the link and password can add, edit, and organise meals together.
 
 **Live:** [simple-meal-plan.com](https://simple-meal-plan.com)
 
