@@ -5,11 +5,15 @@
   <g transform="translate(204.8 204.8) scale(6.144)">
     <defs>
       <mask id="smp-app-dark">
-        <rect width="100" height="100" fill="#fff"></rect>
+        <rect width="110" height="100" fill="#fff"></rect>
         <circle cx="62" cy="50" r="34" fill="#000"></circle>
       </mask>
     </defs>
     <circle fill="#f3f6fa" cx="50" cy="50" r="42" mask="url(#smp-app-dark)"></circle>
     <circle stroke="#b29ef2" cx="62" cy="50" r="34" fill="none" stroke-width="4"></circle>
+  <g fill="#f3f6fa" stroke="none">
+    <polygon points="62.50,56.33 91.89,14.23 88.11,11.77 61.50,55.67"></polygon>
+    <polygon points="66.31,62.51 103.30,42.13 100.70,37.87 65.69,61.49"></polygon>
+  </g>
   </g>
 </svg>

@@ -3,13 +3,17 @@
   <title>SimpleMealPlan</title>
   <defs>
     <mask id="lim-dark">
-      <rect width="100" height="100" fill="#fff"></rect>
+      <rect width="110" height="100" fill="#fff"></rect>
       <circle cx="62" cy="50" r="30" fill="#000"></circle>
     </mask>
   </defs>
   <g transform="translate(6 6) scale(0.48)">
     <circle fill="#f3f6fa" cx="50" cy="50" r="42" mask="url(#lim-dark)"></circle>
     <circle stroke="#b29ef2" cx="62" cy="50" r="30" fill="none" stroke-width="5"></circle>
+  <g fill="#f3f6fa" stroke="none">
+    <polygon points="62.55,56.36 92.07,14.35 87.93,11.65 61.45,55.64"></polygon>
+    <polygon points="66.34,62.56 103.43,42.35 100.57,37.65 65.66,61.44"></polygon>
+  </g>
   </g>
   <text x="64" y="38" font-size="28" font-family="&#39;Inter Tight&#39;, ui-sans-serif, system-ui, sans-serif" fill="#f3f6fa" style="letter-spacing:-0.01em">
     <tspan font-weight="600">Simple</tspan><tspan font-weight="300">MealPlan</tspan>

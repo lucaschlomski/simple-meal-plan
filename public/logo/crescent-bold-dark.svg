@@ -1,11 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="SimpleMealPlan">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 100" role="img" aria-label="SimpleMealPlan">
   <title>SimpleMealPlan</title>
   <defs>
     <mask id="cm-dark-30-5">
-      <rect width="100" height="100" fill="#fff"></rect>
+      <rect width="110" height="100" fill="#fff"></rect>
       <circle cx="62" cy="50" r="30" fill="#000"></circle>
     </mask>
   </defs>
   <circle fill="#f3f6fa" cx="50" cy="50" r="42" mask="url(#cm-dark-30-5)"></circle>
   <circle stroke="#b29ef2" cx="62" cy="50" r="30" fill="none" stroke-width="5"></circle>
+  <g fill="#f3f6fa" stroke="none">
+    <polygon points="62.58,56.38 92.17,14.41 87.83,11.59 61.42,55.62"></polygon>
+    <polygon points="66.36,62.59 103.50,42.45 100.50,37.55 65.64,61.41"></polygon>
+  </g>
 </svg>
