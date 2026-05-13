@@ -35,6 +35,7 @@ export type AdminBoard = {
   updated_at: string;
   last_accessed_at: string | null;
   board_admin_enabled: boolean | number;
+  is_demo?: boolean;
 };
 
 export const MEAL_TYPES: MealType[] = [

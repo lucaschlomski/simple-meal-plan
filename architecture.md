@@ -90,6 +90,9 @@ Within same type and date: stable `id ASC` ordering. No restriction on one meal 
 - Board access depends on `boards.board_password_hash`:
   - `NULL` => public read/write board (no unlock cookie required)
   - non-`NULL` => protected board (requires board password unlock)
+- Demo board (`demo-meal-planner`) allows everyone to open the board admin
+  panel to inspect and manage people/groups, but blocks changes to board name,
+  board password, admin password, and board deletion.
 - Unlock flow sets a board cookie session.
 - Board cookie name pattern: `mp_board_<slug>`.
 - Board cookie grants board read/write meal access.

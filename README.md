@@ -30,6 +30,9 @@ Demo boards:
 - `http://localhost:8788/b/echo-harbor-amber` · password `demo123` (seed data)
 - `http://localhost:8788/b/demo-meal-planner` · no password (public read/write, reset data)
 
+Demo board settings are immutable: board name, board password, admin password,
+and board deletion are blocked. People/groups and meals remain editable.
+
 Daily demo reset is handled by a dedicated scheduled Worker in
 `workers/demo-reset/` (cron: `0 3 * * *` UTC).
 

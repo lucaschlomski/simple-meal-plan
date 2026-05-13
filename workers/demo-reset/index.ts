@@ -45,7 +45,7 @@ type Env = {
 };
 
 async function resetDemoBoard(db: D1Database) {
-  await db.prepare("INSERT INTO boards (slug, name, board_password_hash) VALUES (?, ?, NULL) ON CONFLICT(slug) DO UPDATE SET name = excluded.name, board_password_hash = NULL")
+  await db.prepare("INSERT INTO boards (slug, name, board_password_hash, board_admin_password_hash) VALUES (?, ?, NULL, NULL) ON CONFLICT(slug) DO UPDATE SET name = excluded.name, board_password_hash = NULL, board_admin_password_hash = NULL")
     .bind(DEMO_SLUG, DEMO_NAME)
     .run();
 

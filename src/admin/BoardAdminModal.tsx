@@ -34,6 +34,7 @@ export function BoardAdminModal({
   const modalRef = useRef<HTMLDivElement>(null);
   const toast = useToast();
   useFocusTrap(modalRef, true, onClose);
+  const isDemoBoard = slug === "demo-meal-planner" || board?.is_demo === true;
 
   async function loadAll() {
     const boardData = await api<{ ok: true; board: AdminBoard }>(`/api/boards/${slug}/admin`);
@@ -208,12 +209,13 @@ export function BoardAdminModal({
             <section className="modal-section">
               <h3>{t(language, "manage.settings")}</h3>
               <form onSubmit={saveSettings} className="stack-form">
-                <label>{t(language, "admin.name")}<input className="field" value={name} onChange={(e) => setName(e.target.value)} required /></label>
-                <label>{t(language, "manage.newPassword")}<input className="field" type="password" value={boardPassword} onChange={(e) => setBoardPassword(e.target.value)} placeholder={t(language, "manage.keepPassword")} /></label>
-                <label>{t(language, "manage.adminPassword")}<input className="field" type="password" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} placeholder={board?.board_admin_enabled ? t(language, "manage.keepPassword") : t(language, "manage.adminPasswordOptional")} /></label>
+                <label>{t(language, "admin.name")}<input className="field" value={name} onChange={(e) => setName(e.target.value)} required disabled={isDemoBoard} /></label>
+                <label>{t(language, "manage.newPassword")}<input className="field" type="password" value={boardPassword} onChange={(e) => setBoardPassword(e.target.value)} placeholder={t(language, "manage.keepPassword")} disabled={isDemoBoard} /></label>
+                <label>{t(language, "manage.adminPassword")}<input className="field" type="password" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} placeholder={board?.board_admin_enabled ? t(language, "manage.keepPassword") : t(language, "manage.adminPasswordOptional")} disabled={isDemoBoard} /></label>
+                {isDemoBoard ? <p className="helper-text">{t(language, "manage.demoLockedSettings")}</p> : null}
                 <div className="form-actions">
-                  <button className="btn" type="submit" disabled={saving}>{t(language, "manage.saveSettings")}</button>
-                  {board?.board_admin_enabled ? <button className="btn ghost" type="button" disabled={saving} onClick={clearAdminPassword}>{t(language, "manage.clearAdminPassword")}</button> : null}
+                  <button className="btn" type="submit" disabled={saving || isDemoBoard}>{t(language, "manage.saveSettings")}</button>
+                  {board?.board_admin_enabled && !isDemoBoard ? <button className="btn ghost" type="button" disabled={saving} onClick={clearAdminPassword}>{t(language, "manage.clearAdminPassword")}</button> : null}
                 </div>
               </form>
             </section>
@@ -240,10 +242,12 @@ export function BoardAdminModal({
               </div>
             </section>
 
-            <section className="modal-section danger-zone">
-              <h3>{t(language, "manage.dangerZone")}</h3>
-              <ConfirmInline message={t(language, "manage.deleteBoardConfirm", { name: board?.name ?? slug })} language={language} popDir="up" onConfirm={deleteBoard} trigger={(open) => <button type="button" className="btn danger" onClick={open} disabled={saving}><Trash2 size={14} /> {t(language, "manage.deleteBoard")}</button>} />
-            </section>
+            {!isDemoBoard ? (
+              <section className="modal-section danger-zone">
+                <h3>{t(language, "manage.dangerZone")}</h3>
+                <ConfirmInline message={t(language, "manage.deleteBoardConfirm", { name: board?.name ?? slug })} language={language} popDir="up" onConfirm={deleteBoard} trigger={(open) => <button type="button" className="btn danger" onClick={open} disabled={saving}><Trash2 size={14} /> {t(language, "manage.deleteBoard")}</button>} />
+              </section>
+            ) : null}
           </div>
         )}
       </div>

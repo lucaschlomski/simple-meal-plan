@@ -1,5 +1,5 @@
 import { sha256Hex } from "../../../../lib/crypto";
-import { getBoardAdminRow, publicBoardAdmin, requireBoardAdminAccess } from "../../../../lib/board-admin";
+import { getBoardAdminRow, isDemoBoardSlug, publicBoardAdmin, requireBoardAdminAccess } from "../../../../lib/board-admin";
 
 type UpdateBody = {
   name?: string;
@@ -31,11 +31,15 @@ export const onRequestPut: PagesFunction<Env> = async ({ params, request, env })
   const name = typeof body.name === "string" ? body.name.trim() : undefined;
   const password = typeof body.password === "string" ? body.password : undefined;
   const adminPassword = body.admin_password;
+  const isDemoBoard = isDemoBoardSlug(board.slug);
 
   if (name !== undefined && !name) return Response.json({ ok: false, error: "NAME_REQUIRED" }, { status: 400 });
   if (password !== undefined && !password) return Response.json({ ok: false, error: "PASSWORD_REQUIRED" }, { status: 400 });
   if (adminPassword !== undefined && adminPassword !== null && !adminPassword) {
     return Response.json({ ok: false, error: "ADMIN_PASSWORD_REQUIRED" }, { status: 400 });
+  }
+  if (isDemoBoard && (name !== undefined || password !== undefined || adminPassword !== undefined)) {
+    return Response.json({ ok: false, error: "DEMO_BOARD_LOCKED_SETTINGS" }, { status: 403 });
   }
 
   if (name !== undefined) await env.DB.prepare("UPDATE boards SET name = ? WHERE id = ?").bind(name, board.id).run();
@@ -61,6 +65,9 @@ export const onRequestDelete: PagesFunction<Env> = async ({ params, request, env
   if (!board) return Response.json({ ok: false, error: "BOARD_NOT_FOUND" }, { status: 404 });
   if (!(await requireBoardAdminAccess(request, env, board))) {
     return Response.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
+  }
+  if (isDemoBoardSlug(board.slug)) {
+    return Response.json({ ok: false, error: "DEMO_BOARD_IMMUTABLE" }, { status: 403 });
   }
   await env.DB.prepare("DELETE FROM boards WHERE id = ?").bind(board.id).run();
   return Response.json({ ok: true });

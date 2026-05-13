@@ -6,6 +6,10 @@ ON CONFLICT(slug) DO UPDATE SET
   name = excluded.name,
   board_password_hash = NULL;
 
+UPDATE boards
+SET board_admin_password_hash = NULL
+WHERE slug = 'demo-meal-planner';
+
 DELETE FROM meal_attendees
 WHERE meal_id IN (
   SELECT id FROM meals WHERE board_id = (SELECT id FROM boards WHERE slug = 'demo-meal-planner')

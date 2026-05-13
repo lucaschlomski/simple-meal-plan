@@ -1,6 +1,7 @@
 import {
   createBoardAdminCookie,
   getBoardAdminRow,
+  isDemoBoardSlug,
   matchesBoardAdminPassword,
   publicBoardAdmin
 } from "../../../../lib/board-admin";
@@ -17,6 +18,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ params, request, env }
 
   const board = await getBoardAdminRow(env.DB, slug);
   if (!board) return Response.json({ ok: false, error: "BOARD_NOT_FOUND" }, { status: 404 });
+
+  if (isDemoBoardSlug(board.slug)) {
+    return Response.json({ ok: true, board: publicBoardAdmin(board), demo: true });
+  }
 
   const body = (await request.json().catch(() => ({}))) as UnlockBody;
   if (typeof body.password !== "string") {
