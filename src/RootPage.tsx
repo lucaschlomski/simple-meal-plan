@@ -150,8 +150,11 @@ export function RootPage({ theme, onToggleTheme, language, onToggleLanguage }: {
       <div className="landing-glow" aria-hidden="true" />
       <section className="landing-hero">
         <div className="landing-mark">
-          <span className="landing-dot" aria-hidden="true" />
-          <span className="landing-eyebrow">{t(language, "root.eyebrow")}</span>
+          <img
+            src={`/logo/lockup-horizontal-${theme === "dark" ? "dark" : "light"}.svg`}
+            alt="Simple Meal Plan"
+            height="120"
+          />
         </div>
         <h1 className="landing-title">{t(language, "root.title")}</h1>
         <p className="landing-tagline muted-text">{t(language, "root.tagline")}</p>

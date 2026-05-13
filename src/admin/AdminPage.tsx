@@ -143,6 +143,7 @@ export function AdminPage({
   return (
     <main className="admin-page admin-overview-page">
       <Topbar
+        theme={theme}
         left={<span className="topbar-title">{t(language, "admin.title")}</span>}
         right={
           <>

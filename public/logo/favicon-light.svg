@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="SimpleMealPlan">
+  <title>SimpleMealPlan</title>
+  <defs>
+    <mask id="cm-light-28-7">
+      <rect width="100" height="100" fill="#fff"></rect>
+      <circle cx="62" cy="50" r="28" fill="#000"></circle>
+    </mask>
+  </defs>
+  <circle fill="#0f131c" cx="50" cy="50" r="44" mask="url(#cm-light-28-7)"></circle>
+  <circle stroke="#8b6fd6" cx="62" cy="50" r="28" fill="none" stroke-width="7"></circle>
+</svg>

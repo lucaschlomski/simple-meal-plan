@@ -66,7 +66,7 @@ This file defines the visual design language of the app. All new UI must follow 
 
 Brand-led hero, not a panel:
 
-- Eyebrow row with accent dot and uppercase product name (**Simple Meal Plan**).
+- Horizontal logo lockup (`/logo/lockup-horizontal-{light|dark}.svg`, 120px tall, variant chosen from active `theme`). Replaces the former accent-dot + eyebrow row.
 - Localized large title.
 - Localized one-sentence product summary.
 - Primary create-board button opens a modal.
@@ -110,9 +110,9 @@ All tokens defined in `src/styles.css`. Reference tokens — never hard-code col
 ### Type Scale
 
 - `--text-xs` (0.75rem) through `--text-xl` (1.5rem)
-- `--font-sans`: system UI font stack
+- `--font-sans`: Inter Tight (loaded from Google Fonts) + system UI fallback stack
 - `--font-mono`: system monospace stack
-- No web fonts.
+- Web font: Inter Tight `wght@300;400;500;600;700` via Google Fonts (`<link>` in `index.html`).
 
 ### Spacing
 
@@ -223,7 +223,7 @@ No-op alias retained for legacy markup (identical to default `.btn`).
 
 ## Typography
 
-- Font: system sans-serif stack. Do not introduce Inter or any web font.
+- Font: Inter Tight (web font) + system sans-serif fallback. Use `var(--font-sans)`; do not hard-code the family.
 - Headings: `--tracking-tight`.
 - Body: `line-height: 1.5`.
 - Mobile (`max-width: 699px`): `.field` and `.inline-edit-input` clamped to `font-size: 16px` to suppress iOS focus-zoom.

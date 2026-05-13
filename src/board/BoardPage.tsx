@@ -238,6 +238,7 @@ export function BoardPage({
   return (
     <main className="board-page">
       <Topbar
+        theme={theme}
         left={
           <div className="board-identity">
             <span className="topbar-title">{board?.name || slug}</span>

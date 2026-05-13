@@ -1,0 +1,15 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="SimpleMealPlan">
+  <title>SimpleMealPlan</title>
+  <rect width="1024" height="1024" rx="225" ry="225" fill="#f7f8fa"></rect>
+  <g transform="translate(204.8 204.8) scale(6.144)">
+    <defs>
+      <mask id="smp-app-light">
+        <rect width="100" height="100" fill="#fff"></rect>
+        <circle cx="62" cy="50" r="34" fill="#000"></circle>
+      </mask>
+    </defs>
+    <circle fill="#0f131c" cx="50" cy="50" r="42" mask="url(#smp-app-light)"></circle>
+    <circle stroke="#8b6fd6" cx="62" cy="50" r="34" fill="none" stroke-width="4"></circle>
+  </g>
+</svg>

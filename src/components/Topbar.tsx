@@ -1,9 +1,12 @@
 import { ReactNode, useEffect, useState } from "react";
+import type { ThemeMode } from "../lib/types";
 
 export function Topbar({
+  theme,
   left,
   right
 }: {
+  theme: ThemeMode;
   left: ReactNode;
   right: ReactNode;
 }) {
@@ -17,7 +20,17 @@ export function Topbar({
 
   return (
     <header className={`topbar ${scrolled ? "scrolled" : ""}`}>
-      <div className="topbar-left">{left}</div>
+      <div className="topbar-left">
+        <a href="/" className="topbar-logo" aria-label="Simple Meal Plan">
+          <img
+            src={`/logo/crescent-${theme === "dark" ? "dark" : "light"}.svg`}
+            alt=""
+            width="24"
+            height="24"
+          />
+        </a>
+        {left}
+      </div>
       <div className="topbar-right">{right}</div>
     </header>
   );
