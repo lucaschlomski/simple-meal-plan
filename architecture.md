@@ -177,7 +177,7 @@ Within same type and date: stable `id ASC` ordering. No restriction on one meal 
 
 - `idx_meals_board_date_type_id` on `meals(board_id, meal_date, meal_type, id)`
 - `idx_people_board_active_name` on `people(board_id, active, display_name)`
-- `idx_people_board_position` on `people(board_id, position)` (added in `0002_people_position.sql`)
+- `idx_people_board_position` on `people(board_id, position)`
 
 ### Constraints
 
@@ -264,11 +264,7 @@ All endpoints follow these conventions:
 - Every migration starts with `PRAGMA foreign_keys = ON;`.
 - All statements are idempotent: `CREATE TABLE IF NOT EXISTS`, `INSERT OR IGNORE`.
 - Uses `RETURNING` on INSERT/UPDATE to return created/updated rows.
-- Initial migration: `db/migrations/0001_init.sql`
-- People position migration: `db/migrations/0002_people_position.sql`
-- Board admin/activity migration: `db/migrations/0003_board_admin_activity.sql`
-- Demo board data migration: `db/migrations/0004_demo_board_meal_planner.sql`
-- Public board password-null migration: `db/migrations/0005_public_boards_nullable_password.sql`
+- Baseline migration: `db/migrations/0001_baseline.sql`
 - Demo board reset seed script: `db/demo-board-reset.sql`
 - Daily reset scheduler Worker: `workers/demo-reset/` (`0 3 * * *` UTC)
 - `boards.updated_at` tracks board config/content changes; `boards.last_accessed_at` tracks successful board access and does not touch `updated_at`.
