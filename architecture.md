@@ -192,6 +192,12 @@ All endpoints follow these conventions:
 ### Utility
 
 - `GET /api/health` — returns `{ ok: true, service: "simple-meal-plan-api" }`
+
+### SEO Discovery Files
+
+- `GET /sitemap.xml` is handled by Pages Function `functions/sitemap.xml.ts`.
+- Sitemap lists apex public URLs only (`/`, `/legal`).
+- `robots.txt` is managed in Cloudflare dashboard and references the sitemap URL.
 - `GET /api/admin/session` — admin session check, returns `{ ok: true }` or 401
 - `GET /api/boards/:slug/session` — board session check
 
