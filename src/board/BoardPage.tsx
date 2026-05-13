@@ -241,7 +241,7 @@ export function BoardPage({
         theme={theme}
         left={
           <div className="board-identity">
-            <span className="topbar-title">{board?.name || slug}</span>
+            <a href="/" className="topbar-title topbar-home">{board?.name || slug}</a>
             <span className="slug-pill">/{slug}</span>
             <button
               type="button"
@@ -318,6 +318,7 @@ export function BoardPage({
           >
             {t(language, "board.supportLink")}
           </button>
+
         </p>
       </footer>
 

@@ -262,6 +262,7 @@ All endpoints follow these conventions:
 - Initial migration: `db/migrations/0001_init.sql`
 - People position migration: `db/migrations/0002_people_position.sql`
 - Board admin/activity migration: `db/migrations/0003_board_admin_activity.sql`
+- Demo board data migration: `db/migrations/0004_demo_board_meal_planner.sql`
 - `boards.updated_at` tracks board config/content changes; `boards.last_accessed_at` tracks successful board access and does not touch `updated_at`.
 - `people`, `meals`, and `meal_attendees` changes touch parent `boards.updated_at` via triggers.
 - Seed file: `db/seed.sql` — dev-only; do not run against production D1.

@@ -553,6 +553,10 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
   .floatingchat-container-wrap,
   .floatingchat-container-wrap-mobi {
     bottom: 34px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: 180px !important;
   }
   .floating-chat-kofi-popup-iframe,
   .floating-chat-kofi-popup-iframe-mobi {
@@ -574,6 +578,9 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
 .topbar-logo:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+@media (max-width: 699px) {
+  .topbar-logo { display: none; }
 }
 
 /* =========================================================================
@@ -609,6 +616,14 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+}
+a.topbar-home {
+  color: inherit;
+  text-decoration: none;
+}
+a.topbar-home:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .board-identity {
