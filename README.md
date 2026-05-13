@@ -41,8 +41,9 @@ Local server at `http://localhost:8788`. Demo board: `/b/echo-harbor-amber` (pas
 | Preview | `npm run deploy:preview` | `preview.simple-meal-plan.pages.dev` |
 | Production | `git push origin main` | `simple-meal-plan.pages.dev` |
 
-`/sitemap.xml` is served by a Pages Function (`functions/sitemap.xml.ts`) and
-contains only apex public URLs. `robots.txt` stays Cloudflare-managed.
+`/sitemap.xml` and `/robots.txt` are served by Pages Functions
+(`functions/sitemap.xml.ts`, `functions/robots.txt.ts`) with apex-only
+canonical discovery rules.
 
 ## Key Scripts
 

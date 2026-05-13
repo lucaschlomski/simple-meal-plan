@@ -197,7 +197,9 @@ All endpoints follow these conventions:
 
 - `GET /sitemap.xml` is handled by Pages Function `functions/sitemap.xml.ts`.
 - Sitemap lists apex public URLs only (`/`, `/legal`).
-- `robots.txt` is managed in Cloudflare dashboard and references the sitemap URL.
+- `GET /robots.txt` is handled by Pages Function `functions/robots.txt.ts`.
+- Cloudflare managed robots content is prepended when enabled, then origin
+  robots directives are included.
 - `GET /api/admin/session` — admin session check, returns `{ ok: true }` or 401
 - `GET /api/boards/:slug/session` — board session check
 
