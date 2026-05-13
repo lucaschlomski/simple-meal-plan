@@ -8,6 +8,7 @@ import { LanguageToggle } from "../components/LanguageToggle";
 import { useToast } from "../components/Toast";
 import { t } from "../lib/i18n";
 import { ConfirmInline } from "../components/ConfirmInline";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 function displayDateTime(value: string | null): string {
   return value || "-";
@@ -32,6 +33,8 @@ export function AdminPage({
   const [saving, setSaving] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
   const toast = useToast();
+
+  useDocumentTitle(authed ? "Admin Dashboard - Simple Meal Plan" : "Admin Login - Simple Meal Plan");
 
   async function loadBoards() {
     const data = await api<{ ok: true; boards: AdminBoard[] }>(

@@ -1,5 +1,6 @@
 import { LanguageToggle } from "./components/LanguageToggle";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { useDocumentTitle } from "./hooks/useDocumentTitle";
 import type { LanguageMode, ThemeMode } from "./lib/types";
 
 export function LegalPage({ theme, onToggleTheme, language, onToggleLanguage }: {
@@ -9,6 +10,7 @@ export function LegalPage({ theme, onToggleTheme, language, onToggleLanguage }: 
   onToggleLanguage: () => void;
 }) {
   const isDe = language === "de";
+  useDocumentTitle(isDe ? "Kontakt & Datenschutz - Simple Meal Plan" : "Contact & Privacy - Simple Meal Plan");
   return (
     <main className="legal-page">
       <div className="corner-actions">

@@ -30,21 +30,27 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env, params }
     .first<Row>();
   if (!me) return Response.json({ ok: false, error: "PERSON_NOT_FOUND" }, { status: 404 });
 
-  const cmp = direction === "up" ? "<" : ">";
-  const order = direction === "up" ? "DESC" : "ASC";
-  const neighbor = await env.DB.prepare(
-    `SELECT id, board_id, position FROM people
-     WHERE board_id = ? AND position ${cmp} ?
-     ORDER BY position ${order}, id ${order}
-     LIMIT 1`
+  const rows = await env.DB.prepare(
+    "SELECT id, board_id, position FROM people WHERE board_id = ? ORDER BY position ASC, id ASC"
   )
-    .bind(board.id, me.position)
-    .first<Row>();
+    .bind(board.id)
+    .all<Row>();
+  const ordered = rows.results ?? [];
+  const currentIndex = ordered.findIndex((row) => row.id === me.id);
+  if (currentIndex === -1) return Response.json({ ok: false, error: "PERSON_NOT_FOUND" }, { status: 404 });
+  const neighborIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+  const neighbor = ordered[neighborIndex];
   if (!neighbor) return Response.json({ ok: true });
 
-  await env.DB.batch([
-    env.DB.prepare("UPDATE people SET position = ? WHERE id = ?").bind(neighbor.position, me.id),
-    env.DB.prepare("UPDATE people SET position = ? WHERE id = ?").bind(me.position, neighbor.id)
-  ]);
+  const reordered = [...ordered];
+  const [current] = reordered.splice(currentIndex, 1);
+  reordered.splice(neighborIndex, 0, current);
+
+  await env.DB.batch(
+    reordered.map((row, index) =>
+      env.DB.prepare("UPDATE people SET position = ? WHERE id = ? AND board_id = ?")
+        .bind(index + 1, row.id, board.id)
+    )
+  );
   return Response.json({ ok: true });
 };

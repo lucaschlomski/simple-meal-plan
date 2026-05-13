@@ -2,6 +2,7 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { LanguageToggle } from "./components/LanguageToggle";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { Turnstile, type TurnstileStatus } from "./components/Turnstile";
+import { useDocumentTitle } from "./hooks/useDocumentTitle";
 import { useFocusTrap } from "./hooks/useFocusTrap";
 import { api } from "./lib/api";
 import { t } from "./lib/i18n";
@@ -77,6 +78,7 @@ export function RootPage({ theme, onToggleTheme, language, onToggleLanguage }: {
   language: LanguageMode;
   onToggleLanguage: () => void;
 }) {
+  useDocumentTitle("Simple Meal Plan - Plan meals together");
   const [creating, setCreating] = useState(false);
   const [saving, setSaving] = useState(false);
 

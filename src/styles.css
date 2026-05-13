@@ -1187,8 +1187,8 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
   top: 50%;
   right: 4px;
   transform: translateY(-50%);
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border: 0;
   background: transparent;
   border-radius: var(--r-sm);
@@ -1320,7 +1320,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
 }
 
 .person-row {
-  min-height: 40px;
+  min-height: 44px;
   border: 0;
   border-radius: var(--r-sm);
   background: transparent;
@@ -1533,16 +1533,16 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
   background: var(--panel);
 }
 
-/* Reorder column inside a people-admin-row: two stacked compact icon buttons.
-   Sized so the pair matches the 40px Stepper height. */
+/* Reorder column inside a people-admin-row: two stacked icon buttons.
+   Sized to remain reliably tappable on mobile. */
 .row-reorder {
   display: grid;
   grid-template-rows: 1fr 1fr;
-  gap: 2px;
+  gap: 4px;
 }
 .btn.icon.xs {
-  width: 24px;
-  height: 18px;
+  width: 28px;
+  height: 24px;
   min-height: 0;
   border-radius: var(--r-sm);
 }
@@ -1583,7 +1583,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
   border-radius: var(--r-md);
   background: var(--panel);
   overflow: hidden;
-  height: 40px;
+  height: 44px;
 }
 .stepper button {
   border: 0;
@@ -1646,7 +1646,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
   justify-content: flex-end;
 }
 .confirm-popover .confirm-actions .btn {
-  min-height: 34px;
+  min-height: 44px;
   padding: 6px var(--s-3);
 }
 

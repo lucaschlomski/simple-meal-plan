@@ -87,6 +87,12 @@ Do not call `window.alert`, `window.confirm`, or `window.prompt`. Always use `To
 - `relativeDayLabel(date, language)` provides language-aware relative labels (today/tomorrow/yesterday/in-N-days).
 - `DatePicker` component is hybrid: touch devices use native `<input type="date">`, desktop renders a typed field + portalled `react-day-picker` calendar with locale and Monday-first weeks. Always speaks `YYYY-MM-DD` to parent.
 
+### Mobile Zoom Policy
+
+- Viewport uses `width=device-width, initial-scale=1.0`.
+- The app does not block browser zoom via JavaScript gesture handlers.
+- Mobile form inputs keep at least 16px font size to avoid iOS focus zoom jumps.
+
 ### Component Contracts
 
 Reusable building blocks in `src/components/`. Reuse before creating new components.

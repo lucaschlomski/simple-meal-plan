@@ -20,6 +20,7 @@ import { t } from "../lib/i18n";
 import { DayColumn } from "./DayColumn";
 import { MealModal } from "./MealModal";
 import { BoardAdminModal } from "../admin/BoardAdminModal";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 function defaultMealTypeForDate(date: string | null, days: Day[]): MealType {
   const day = date ? days.find((candidate) => candidate.date === date) : null;
@@ -61,6 +62,12 @@ export function BoardPage({
   const [edgeLeft, setEdgeLeft] = useState(false);
   const [edgeRight, setEdgeRight] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useDocumentTitle(
+    locked
+      ? `Board /${slug} - Simple Meal Plan`
+      : `${board?.name || slug} - Simple Meal Plan`
+  );
 
   async function loadAll() {
     const boardData = await api<{ ok: true; board: Board; days: Day[] }>(

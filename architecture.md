@@ -64,6 +64,7 @@ Within same type and date: stable `id ASC` ordering. No restriction on one meal 
 - No ad-hoc free-text attendees in meals.
 - Meal attendee counter is the sum of selected attendees' `group_size`, not just selected row count.
 - People order within a board is admin-controlled via the `position` column. New people are appended (`MAX(position) + 1`); admin reorders via the manage modal. Both the public `/people` and the admin people list return rows ordered by `position ASC, id ASC`.
+- Reorder writes normalize positions to a contiguous sequence (`1..N`) after each move so stale duplicates cannot block visible up/down moves.
 
 ## Meal Editing and Deletion
 
