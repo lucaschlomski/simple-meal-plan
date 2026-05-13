@@ -21,9 +21,9 @@ export async function createUniqueSlug(db: D1Database): Promise<string> {
   throw new Error("slug_generation_failed");
 }
 
-export async function createBoard(db: D1Database, name: string, password: string): Promise<CreatedBoard | null> {
+export async function createBoard(db: D1Database, name: string, password: string | null): Promise<CreatedBoard | null> {
   const slug = await createUniqueSlug(db);
-  const boardPasswordHash = await sha256Hex(password);
+  const boardPasswordHash = password === null ? null : await sha256Hex(password);
   return db.prepare(
     `INSERT INTO boards (slug, name, board_password_hash)
      VALUES (?, ?, ?)

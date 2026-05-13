@@ -465,6 +465,25 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s-4) 0; }
   color: var(--fg);
   font-weight: 600;
 }
+.landing-demo-link {
+  justify-self: center;
+  margin-top: var(--s-4);
+  color: var(--fg-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+  padding: 6px var(--s-3);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--d-fast) var(--ease-out),
+              border-color var(--d-fast) var(--ease-out),
+              background var(--d-fast) var(--ease-out);
+}
+.landing-demo-link:hover {
+  color: var(--fg);
+  border-color: var(--border-strong);
+  background: var(--panel-soft);
+}
 .landing-legal {
   position: fixed;
   right: var(--s-3);

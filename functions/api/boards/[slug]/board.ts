@@ -1,4 +1,4 @@
-import { requireBoardSession } from "../../../lib/guards";
+import { requireBoardAccess } from "../../../lib/guards";
 import { getBoardBySlug } from "../../../lib/board";
 import { attendeeWeightedCount, compareMealOrder, expandDateRange } from "../../../lib/board-view";
 
@@ -25,7 +25,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env, params })
   const slug = String(params.slug || "");
   if (!slug) return Response.json({ ok: false, error: "INVALID_SLUG" }, { status: 400 });
 
-  if (!(await requireBoardSession(request, env, slug))) {
+  if (!(await requireBoardAccess(request, env, slug))) {
     return Response.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
   }
 

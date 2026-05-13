@@ -11,7 +11,7 @@ type BoardRecord = {
   id: number;
   slug: string;
   name: string;
-  board_password_hash: string;
+  board_password_hash: string | null;
 };
 
 export const onRequestPost: PagesFunction<Env> = async ({ params, request, env }) => {
@@ -22,11 +22,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ params, request, env }
     return Response.json({ ok: false, error: "INVALID_SLUG" }, { status: 400 });
   }
 
-  const body = (await request.json().catch(() => ({}))) as UnlockBody;
-  if (typeof body.password !== "string") {
-    return Response.json({ ok: false, error: "PASSWORD_REQUIRED" }, { status: 400 });
-  }
-
   const board = await env.DB.prepare(
     "SELECT id, slug, name, board_password_hash FROM boards WHERE slug = ? LIMIT 1"
   )
@@ -35,6 +30,15 @@ export const onRequestPost: PagesFunction<Env> = async ({ params, request, env }
 
   if (!board) {
     return Response.json({ ok: false, error: "BOARD_NOT_FOUND" }, { status: 404 });
+  }
+
+  if (board.board_password_hash === null) {
+    return Response.json({ ok: true, board: { slug: board.slug, name: board.name }, public: true });
+  }
+
+  const body = (await request.json().catch(() => ({}))) as UnlockBody;
+  if (typeof body.password !== "string") {
+    return Response.json({ ok: false, error: "PASSWORD_REQUIRED" }, { status: 400 });
   }
 
   const computedHash = await sha256Hex(body.password);

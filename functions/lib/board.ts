@@ -4,6 +4,12 @@ export type BoardRow = {
   name: string;
 };
 
+export type BoardAccessRow = {
+  id: number;
+  slug: string;
+  board_password_hash: string | null;
+};
+
 export type MealRow = {
   id: number;
   board_id: number;
@@ -21,6 +27,13 @@ export async function getBoardBySlug(db: D1Database, slug: string): Promise<Boar
     .prepare("SELECT id, slug, name FROM boards WHERE slug = ? LIMIT 1")
     .bind(slug)
     .first<BoardRow>();
+}
+
+export async function getBoardAccessBySlug(db: D1Database, slug: string): Promise<BoardAccessRow | null> {
+  return db
+    .prepare("SELECT id, slug, board_password_hash FROM boards WHERE slug = ? LIMIT 1")
+    .bind(slug)
+    .first<BoardAccessRow>();
 }
 
 export async function getMealById(db: D1Database, mealId: number): Promise<MealRow | null> {

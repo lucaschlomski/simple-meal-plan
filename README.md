@@ -28,7 +28,10 @@ VITE_TURNSTILE_SITE_KEY=your-turnstile-site-key
 
 Demo boards:
 - `http://localhost:8788/b/echo-harbor-amber` · password `demo123` (seed data)
-- `http://localhost:8788/b/demo-meal-planner` · password `demo123` (migration data)
+- `http://localhost:8788/b/demo-meal-planner` · no password (public read/write, reset data)
+
+Daily demo reset is handled by a dedicated scheduled Worker in
+`workers/demo-reset/` (cron: `0 3 * * *` UTC).
 
 ## Scripts
 
@@ -41,6 +44,10 @@ Demo boards:
 | `npm run db:migrate:local` | Apply migrations to local D1 |
 | `npm run db:migrate:preview` | Apply migrations to preview D1 |
 | `npm run db:migrate:prod` | Apply migrations to production D1 |
+| `npm run db:demo:local` | Reset demo board on local D1 |
+| `npm run db:demo:preview` | Reset demo board on preview D1 |
+| `npm run db:demo:prod` | Reset demo board on production D1 |
+| `npm run demo-reset:deploy:prod` | Deploy daily demo reset worker (prod) |
 
 Full deployment workflow in [architecture.md](architecture.md).
 

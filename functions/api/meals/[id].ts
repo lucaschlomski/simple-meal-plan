@@ -1,5 +1,5 @@
 import { getMealById } from "../../lib/board";
-import { requireBoardSession } from "../../lib/guards";
+import { requireBoardAccess } from "../../lib/guards";
 
 type UpdateMealBody = {
   meal_date?: string;
@@ -28,7 +28,7 @@ export const onRequestPut: PagesFunction<Env> = async ({ request, env, params })
   const boardSlug = await resolveBoardSlug(env.DB, meal.board_id);
   if (!boardSlug) return Response.json({ ok: false, error: "BOARD_NOT_FOUND" }, { status: 404 });
 
-  if (!(await requireBoardSession(request, env, boardSlug))) {
+  if (!(await requireBoardAccess(request, env, boardSlug))) {
     return Response.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
   }
 
@@ -73,7 +73,7 @@ export const onRequestDelete: PagesFunction<Env> = async ({ request, env, params
   const boardSlug = await resolveBoardSlug(env.DB, meal.board_id);
   if (!boardSlug) return Response.json({ ok: false, error: "BOARD_NOT_FOUND" }, { status: 404 });
 
-  if (!(await requireBoardSession(request, env, boardSlug))) {
+  if (!(await requireBoardAccess(request, env, boardSlug))) {
     return Response.json({ ok: false, error: "UNAUTHORIZED" }, { status: 401 });
   }
 

@@ -87,7 +87,9 @@ Within same type and date: stable `id ASC` ordering. No restriction on one meal 
 
 ### Board Area (`/b/:slug`)
 
-- Protected by board-specific password.
+- Board access depends on `boards.board_password_hash`:
+  - `NULL` => public read/write board (no unlock cookie required)
+  - non-`NULL` => protected board (requires board password unlock)
 - Unlock flow sets a board cookie session.
 - Board cookie name pattern: `mp_board_<slug>`.
 - Board cookie grants board read/write meal access.
@@ -111,7 +113,7 @@ Within same type and date: stable `id ASC` ordering. No restriction on one meal 
 
 ### Password and session implementation
 
-- Board passwords are stored as SHA-256 hashes in `boards.board_password_hash`.
+- Board passwords are stored as SHA-256 hashes in `boards.board_password_hash` for protected boards; public boards store `NULL`.
 - Session tokens are HMAC-SHA256 signed with `SESSION_SIGNING_KEY`.
 - Admin sessions expire after 7 days. Board sessions expire after 14 days.
 - Auth cookies are `HttpOnly`, `SameSite=Lax`. `Secure` flag is set conditionally: `new URL(request.url).protocol === "https:"` — true on deployed, false on local `http://localhost:8788`.
@@ -130,7 +132,7 @@ Within same type and date: stable `id ASC` ordering. No restriction on one meal 
 | `id` | INTEGER | Primary key, autoincrement |
 | `slug` | TEXT | Unique, human-typable |
 | `name` | TEXT | Display name |
-| `board_password_hash` | TEXT | SHA-256 hash |
+| `board_password_hash` | TEXT | Nullable SHA-256 hash. `NULL` means public read/write board. |
 | `board_admin_password_hash` | TEXT | Nullable SHA-256 hash for optional board-admin password |
 | `created_at` | TEXT | Default `CURRENT_TIMESTAMP` |
 | `updated_at` | TEXT | Auto-updated via trigger |
@@ -207,7 +209,7 @@ All endpoints follow these conventions:
 ### Board access
 
 - `POST /api/boards` — public board creation; requires Turnstile token
-- `POST /api/boards/:slug/unlock` — verify board password, set board cookie
+- `POST /api/boards/:slug/unlock` — for protected boards: verify password + set board cookie. For public boards: immediate success.
 - `GET /api/boards/:slug/board` — return board columns, meals, attendees, attendee counts. Requires valid board cookie.
 - `GET /api/boards/:slug/people` — return board people list, ordered by `position ASC, id ASC`. Requires valid board cookie.
 
@@ -263,6 +265,9 @@ All endpoints follow these conventions:
 - People position migration: `db/migrations/0002_people_position.sql`
 - Board admin/activity migration: `db/migrations/0003_board_admin_activity.sql`
 - Demo board data migration: `db/migrations/0004_demo_board_meal_planner.sql`
+- Public board password-null migration: `db/migrations/0005_public_boards_nullable_password.sql`
+- Demo board reset seed script: `db/demo-board-reset.sql`
+- Daily reset scheduler Worker: `workers/demo-reset/` (`0 3 * * *` UTC)
 - `boards.updated_at` tracks board config/content changes; `boards.last_accessed_at` tracks successful board access and does not touch `updated_at`.
 - `people`, `meals`, and `meal_attendees` changes touch parent `boards.updated_at` via triggers.
 - Seed file: `db/seed.sql` — dev-only; do not run against production D1.

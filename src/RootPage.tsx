@@ -57,7 +57,7 @@ function CreateBoardModal({ language, saving, turnstileStatus, turnstileToken, o
           </label>
           <label>
             {t(language, "root.boardPassword")}
-            <input className="field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <input className="field" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder={t(language, "root.passwordOptional")} />
           </label>
           <p className="helper-text">{t(language, "root.boardPasswordHelp")}</p>
           {error ? <p className="error-text">{error}</p> : null}
@@ -163,6 +163,7 @@ export function RootPage({ theme, onToggleTheme, language, onToggleLanguage }: {
         </div>
         <p className="landing-cta">{t(language, "root.cta")} <code>/b/&lt;slug&gt;</code></p>
         <p className="landing-attribution">{t(language, "root.by")} <strong>Luca Schlomski</strong></p>
+        <a className="landing-demo-link" href="/b/demo-meal-planner">{t(language, "root.openDemo")}</a>
         <p className="landing-legal">
         <a href="/legal">{language === "de" ? "Kontakt & Datenschutz" : "Contact & Privacy"}</a>
         {" · "}

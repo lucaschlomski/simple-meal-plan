@@ -5,6 +5,7 @@ import {
   getBoardCookieName,
   verifySessionToken
 } from "./session";
+import { getBoardAccessBySlug } from "./board";
 
 export async function requireAdminSession(request: Request, env: Env): Promise<boolean> {
   const cookies = parseCookieHeader(request.headers.get("cookie"));
@@ -21,6 +22,13 @@ export async function requireBoardSession(request: Request, env: Env, slug: stri
   const payload = await verifySessionToken(env.SESSION_SIGNING_KEY, token, "board");
   if (!payload) return false;
   return payload.slug === slug;
+}
+
+export async function requireBoardAccess(request: Request, env: Env, slug: string): Promise<boolean> {
+  const board = await getBoardAccessBySlug(env.DB, slug);
+  if (!board) return false;
+  if (board.board_password_hash === null) return true;
+  return requireBoardSession(request, env, slug);
 }
 
 export async function requireBoardAdminSession(

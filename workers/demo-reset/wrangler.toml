@@ -1,0 +1,11 @@
+name = "simple-meal-plan-demo-reset"
+main = "index.ts"
+compatibility_date = "2026-05-13"
+
+[triggers]
+crons = ["0 3 * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "SimpleMealPlan-Production"
+database_id = "c5028b53-11bc-4234-b254-893979ff1668"
